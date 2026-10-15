@@ -1,24 +1,44 @@
 /* ==========================================================================
-   PAKJOBS PORTAL - SEPARATED MAIN APPLICATION SCRIPT (WITH JS DATA FILE)
+   PAKJOBS PORTAL - 100% BULLETPROOF MOBILE SCRIPT (NO FETCH)
    ========================================================================== */
 
-let siteConfig = null;
+let siteConfig = {
+  site_name: "PakJobs Portal",
+  domain: "easy2find.site",
+  ticker_text: "Latest Updates: PPSC Assistant Director Jobs 2026, PM Youth Business Loans & CM Punjab Solar Scheme Open!",
+  nav_links: [
+    { label: "Home", action: "home" },
+    { label: "Federal Jobs", category: "Federal" },
+    { label: "Punjab Jobs", category: "Punjab" },
+    { label: "Govt Schemes", category: "Schemes" }
+  ],
+  footer_links: [
+    { label: "About Us", page: "about" },
+    { label: "Contact Us", page: "contact" },
+    { label: "Privacy Policy", page: "privacy" },
+    { label: "Disclaimer", page: "disclaimer" },
+    { label: "Terms of Service", page: "terms" }
+  ]
+};
+
 let allPostsData = [];
 
 document.addEventListener('DOMContentLoaded', () => {
   initializeApp();
 });
 
-async function initializeApp() {
+/* ==========================================================================
+   1. DATA INITIALIZATION SYSTEM (Instant Load without Fetch)
+   ========================================================================== */
+function initializeApp() {
   try {
-    const configRes = await fetch('config/site-config.json');
-    siteConfig = await configRes.json();
-
-    // Directly load the global array since pak-jobs-schemes.js is linked in HTML
-    if (typeof allPostsData !== 'undefined' && allPostsData.length > 0) {
-      // Already loaded via script tag
-    } else if (typeof pakJobsData !== 'undefined') {
+    // Load data directly from pak-jobs-schemes.js global variable
+    if (typeof pakJobsData !== 'undefined') {
       allPostsData = pakJobsData;
+    } else if (typeof allJobsData !== 'undefined') {
+      allPostsData = allJobsData;
+    } else {
+      allPostsData = [];
     }
 
     renderHeader();
@@ -35,48 +55,7 @@ async function initializeApp() {
 
   } catch (error) {
     console.error("Error initializing app:", error);
-    useFallbackData();
   }
-}
-    renderHeader();
-    renderFooter();
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const jobId = urlParams.get('id');
-
-    if (jobId) {
-      router('detail', jobId);
-    } else {
-      router('home');
-    }
-
-  } catch (error) {
-    console.error("Error initializing app:", error);
-    useFallbackData();
-  }
-}
-
-function useFallbackData() {
-  siteConfig = {
-    site_name: "PakJobs Portal",
-    ticker_text: "Latest: PPSC Assistant Director Jobs 2026 & PM Youth Loan Scheme Open!",
-    nav_links: [
-      { label: "Home", action: "home" },
-      { label: "Federal Jobs", category: "Federal" },
-      { label: "Punjab Jobs", category: "Punjab" },
-      { label: "Govt Schemes", category: "Schemes" }
-    ],
-    footer_links: [
-      { label: "About Us", page: "about" },
-      { label: "Contact Us", page: "contact" },
-      { label: "Privacy Policy", page: "privacy" },
-      { label: "Disclaimer", page: "disclaimer" }
-    ]
-  };
-
-  renderHeader();
-  renderFooter();
-  router('home');
 }
 
 /* ==========================================================================
@@ -360,7 +339,7 @@ function renderStaticPage(pageKey) {
 }
 
 /* ==========================================================================
-   4. ADVANCED SEARCH & FILTER MODAL SYSTEM (Education + Field)
+   4. ADVANCED SEARCH & FILTER MODAL SYSTEM
    ========================================================================== */
 function openSearchModal() {
   const modal = document.getElementById("search-modal");
@@ -396,14 +375,12 @@ function triggerModalSearch() {
 
   let filtered = allPostsData;
 
-  // 1. Filter by Qualification Dropdown
   if (selectedQual !== "All") {
     filtered = filtered.filter(item => 
       (item.qualification || "").toLowerCase().includes(selectedQual.toLowerCase())
     );
   }
 
-  // 2. Filter by Field / Sector Dropdown
   if (selectedField !== "All") {
     filtered = filtered.filter(item => 
       (item.title_en || "").toLowerCase().includes(selectedField.toLowerCase()) ||
@@ -412,7 +389,6 @@ function triggerModalSearch() {
     );
   }
 
-  // 3. Filter by Search Query
   if (query.trim() !== "") {
     const q = query.toLowerCase();
     filtered = filtered.filter(item => 
