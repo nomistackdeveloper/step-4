@@ -3,129 +3,49 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pakistan Jobs & Schemes Portal 2026 | Easy2Find</title>
+  <title>Pakistan Jobs & Schemes Portal | Official Government Notifications</title>
   
-  <!-- SEO Meta Tags -->
-  <meta name="description" content="Find the latest government jobs in Pakistan, PPSC, FPSC, NTS notices, CM Punjab Solar, E-Bike, and BISP schemes.">
-  <link rel="icon" type="image/svg+xml" href="favicon.svg">
-
+  <!-- Meta Tags for SEO -->
+  <meta name="description" content="Find latest Federal & Provincial Government Jobs in Pakistan, PPSC, FPSC, NTS, Army Jobs, PM Youth Schemes, and Scholarships.">
+  <meta name="keywords" content="Govt Jobs Pakistan, PPSC Jobs, FPSC Jobs, NTS Jobs, PM Youth Loan Scheme, BISP">
+  
   <!-- Tailwind CSS & Custom Fonts -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+    
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    }
+    .font-urdu {
+      font-family: 'Noto Nastaliq Urdu', serif;
+      line-height: 2.2;
+    }
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
 </head>
-<body class="bg-gray-100 text-gray-800 flex flex-col min-h-screen">
+<body class="bg-gray-100 text-gray-800 pb-20 md:pb-0 flex flex-col min-h-screen">
 
-  <!-- Header Section with Interactive Mobile Search Toggle -->
-  <div id="site-header">
-    <header class="bg-emerald-900 text-white shadow-md sticky top-0 z-50">
-      <div class="max-w-5xl mx-auto px-4 py-3 flex justify-between items-center">
-        
-        <!-- Logo -->
-        <a href="index.html" class="text-lg sm:text-xl font-black tracking-tight flex items-center gap-2">
-          <span class="bg-emerald-500 text-emerald-950 px-2 py-0.5 rounded text-sm">PK</span>
-          <span>PakJobs Portal</span>
-        </a>
+  <!-- DYNAMIC SHARED HEADER CONTAINER -->
+  <header id="main-header" class="sticky top-0 z-50 shadow-md bg-emerald-900 text-white"></header>
 
-        <!-- Right Side Nav Actions -->
-        <nav class="flex items-center gap-2 sm:gap-3 text-xs font-semibold">
-          <a href="pages/about.html" class="hover:text-emerald-300 transition hidden sm:inline">About</a>
-          <a href="pages/contact.html" class="hover:text-emerald-300 transition hidden sm:inline">Contact</a>
-          <a href="index.html" class="bg-emerald-800 hover:bg-emerald-700 py-1.5 px-3 rounded-xl transition">🏠 Home</a>
-          
-          <!-- Mobile Search Toggle Button (Shows ONLY on Mobile) -->
-          <button id="mobile-search-toggle" class="sm:hidden bg-emerald-800 hover:bg-emerald-700 p-2 rounded-xl text-sm flex items-center gap-1 transition">
-            🔍 <span class="text-[11px]">Search</span>
-          </button>
-        </nav>
-
-      </div>
-    </header>
-  </div>
-
-  <!-- Breaking News Ticker -->
-  <div class="bg-emerald-950 text-emerald-200 text-xs py-2 px-4 overflow-hidden border-b border-emerald-800">
-    <div class="max-w-5xl mx-auto flex items-center gap-3">
-      <span class="bg-red-600 text-white font-extrabold text-[10px] uppercase px-2 py-0.5 rounded animate-pulse whitespace-nowrap">LATEST</span>
-      <div class="overflow-hidden whitespace-nowrap w-full">
-        <p id="ticker-text" class="inline-block animate-marquee font-medium">Loading latest updates...</p>
-      </div>
+  <!-- MAIN APP ROUTER CONTAINER -->
+  <main id="app-content" class="flex-grow max-w-6xl w-full mx-auto px-3 sm:px-4 py-4 space-y-6">
+    <!-- Initial Loading State for Weak Mobile Networks -->
+    <div id="loading-spinner" class="text-center py-16">
+      <div class="inline-block animate-spin rounded-full h-10 w-10 border-4 border-emerald-700 border-t-transparent"></div>
+      <p class="text-sm text-gray-500 mt-3 font-medium">Loading Jobs & Schemes Portal...</p>
     </div>
-  </div>
-
-  <!-- Main Content Container -->
-  <main class="flex-grow max-w-5xl w-full mx-auto px-4 py-6 space-y-6">
-
-    <!-- Search & Advanced Filter Section (Hidden by Default on Mobile, Toggleable) -->
-    <div id="search-container" class="hidden sm:block bg-white p-4 sm:p-6 rounded-3xl shadow-sm border border-gray-200 space-y-4 transition-all duration-300">
-      
-      <!-- Search Input + Qualification Dropdown -->
-      <div class="flex flex-col sm:flex-row gap-3">
-        <!-- Main Search Bar -->
-        <div class="relative flex-grow">
-          <span class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">🔍</span>
-          <input type="text" id="search-input" placeholder="Search jobs, departments, schemes (e.g. PPSC, Solar, BISP)..." class="w-full text-xs sm:text-sm pl-11 pr-4 py-3.5 bg-gray-50 rounded-2xl border border-gray-200 focus:outline-none focus:border-emerald-600 transition">
-        </div>
-
-        <!-- Qualification Dropdown Filter -->
-        <select id="qualification-filter" class="text-xs sm:text-sm p-3.5 bg-gray-50 rounded-2xl border border-gray-200 focus:outline-none focus:border-emerald-600 font-medium text-gray-700 cursor-pointer">
-          <option value="All">🎓 All Qualifications</option>
-          <option value="Matric">Matric / Below</option>
-          <option value="Intermediate">Intermediate (FA/FSc/IT)</option>
-          <option value="Graduation">Graduation / Bachelor</option>
-          <option value="Master">Master Degree</option>
-        </select>
-      </div>
-
-      <!-- Quick Suggestion Pills (1-Tap Filters) -->
-      <div class="flex items-center gap-2 overflow-x-auto hide-scrollbar pt-1 pb-1">
-        <span class="text-[11px] font-bold text-gray-400 uppercase tracking-wider whitespace-nowrap">Trending:</span>
-        <button onclick="applySuggestion('PPSC')" class="suggestion-btn text-xs bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-semibold px-3 py-1.5 rounded-xl border border-emerald-200 transition whitespace-nowrap">🔥 PPSC Jobs</button>
-        <button onclick="applySuggestion('Solar')" class="suggestion-btn text-xs bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-semibold px-3 py-1.5 rounded-xl border border-emerald-200 transition whitespace-nowrap">⚡ CM Solar</button>
-        <button onclick="applySuggestion('E-Bike')" class="suggestion-btn text-xs bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-semibold px-3 py-1.5 rounded-xl border border-emerald-200 transition whitespace-nowrap">🏍️ E-Bike Scheme</button>
-        <button onclick="applySuggestion('BISP')" class="suggestion-btn text-xs bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-semibold px-3 py-1.5 rounded-xl border border-emerald-200 transition whitespace-nowrap">💰 BISP 10500</button>
-        <button onclick="applySuggestion('FPSC')" class="suggestion-btn text-xs bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-semibold px-3 py-1.5 rounded-xl border border-emerald-200 transition whitespace-nowrap">🏛️ FPSC Jobs</button>
-      </div>
-
-      <!-- Category Filter Tabs -->
-      <div class="flex gap-2 overflow-x-auto hide-scrollbar pt-2 border-t border-gray-100">
-        <button data-category="All" class="filter-btn text-xs font-bold px-4 py-2 rounded-xl bg-emerald-900 text-white transition whitespace-nowrap">All Listings</button>
-        <button data-category="Federal" class="filter-btn text-xs font-bold px-4 py-2 rounded-xl bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 transition whitespace-nowrap">Federal Jobs</button>
-        <button data-category="Punjab" class="filter-btn text-xs font-bold px-4 py-2 rounded-xl bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 transition whitespace-nowrap">Punjab Jobs</button>
-        <button data-category="Schemes" class="filter-btn text-xs font-bold px-4 py-2 rounded-xl bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 transition whitespace-nowrap">Govt Schemes</button>
-      </div>
-
-    </div>
-
-    <!-- Listings Header / Counter -->
-    <div class="flex justify-between items-center px-1">
-      <h2 class="text-sm sm:text-base font-extrabold text-gray-900">Active Advertisements & Schemes</h2>
-      <span id="result-count" class="text-xs text-gray-500 font-semibold">Loading...</span>
-    </div>
-
-    <!-- Job Cards Container -->
-    <div id="job-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <!-- Cards rendered dynamically via app.js -->
-    </div>
-
   </main>
 
-  <!-- Shared Footer Placeholder -->
-  <div id="site-footer">
-    <footer class="bg-gray-900 text-gray-400 py-8 px-4 text-center text-xs border-t border-gray-800 space-y-4 mt-auto">
-      <div class="max-w-4xl mx-auto flex flex-wrap justify-center gap-4 text-gray-300 font-medium">
-        <a href="pages/about.html" class="hover:text-emerald-400 transition">About Us</a>
-        <a href="pages/contact.html" class="hover:text-emerald-400 transition">Contact Us</a>
-        <a href="pages/privacy-policy.html" class="hover:text-emerald-400 transition">Privacy Policy</a>
-        <a href="pages/disclaimer.html" class="hover:text-emerald-400 transition">Disclaimer</a>
-        <a href="pages/terms.html" class="hover:text-emerald-400 transition">Terms of Service</a>
-      </div>
-      <p class="text-gray-500">© 2026 PakJobs Portal. All rights reserved. Built for Pakistani Job Seekers & Students.</p>
-    </footer>
-  </div>
+  <!-- DYNAMIC SHARED FOOTER CONTAINER -->
+  <footer id="main-footer" class="bg-gray-900 text-gray-300 mt-10 border-t border-gray-800"></footer>
 
-  <!-- JavaScript Files -->
-  <script src="assets/js/layout.js"></script>
-  <script src="assets/js/app.js"></script>
-
-</body>
-</html>
+  <!-- MOBILE STICKY BOTTOM NAV BAR (Optimized for 95% Mobile
