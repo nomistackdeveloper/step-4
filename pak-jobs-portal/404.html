@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page Not Found | Pakistan Jobs & Schemes Portal</title>
+  
+  <!-- Tailwind CSS & Custom Fonts -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+    
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    }
+    .font-urdu {
+      font-family: 'Noto Nastaliq Urdu', serif;
+      line-height: 2.2;
+    }
+  </style>
+
+  <!-- Automatic JavaScript Redirect to Homepage after 3 seconds -->
+  <script>
+    setTimeout(() => {
+      window.location.href = "index.html";
+    }, 3500);
+  </script>
+</head>
+<body class="bg-gray-100 text-gray-800 flex items-center justify-center min-h-screen px-4">
+
+  <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-200 max-w-md w-full text-center space-y-4">
+    
+    <!-- Status Icon -->
+    <div class="w-16 h-16 bg-emerald-100 text-emerald-800 rounded-full flex items-center justify-center mx-auto text-2xl font-black">
+      404
+    </div>
+
+    <!-- Heading -->
+    <h1 class="text-xl font-bold text-gray-900">Page Not Found / صفحہ نہیں ملا</h1>
+    
+    <!-- Description in English & Urdu -->
+    <p class="text-xs text-gray-600 leading-relaxed">
+      The job or scheme page you are looking for might have been removed, updated, or is temporarily unavailable.
+    </p>
+    <p class="font-urdu text-xs text-emerald-900 text-right">
+      آپ جس صفحہ کی تلاش کر رہے ہیں وہ دستیاب نہیں ہے۔ آپ کو خود بخود ہوم پیج پر منتقل کیا جا رہا ہے۔
+    </p>
+
+    <!-- Action Button -->
+    <div class="pt-4">
+      <a href="index.html" class="inline-block bg-emerald-700 hover:bg-emerald-800 text-white font-semibold text-xs py-3 px-6 rounded-xl transition shadow-sm w-full">
+        🏠 Go to Homepage Now
+      </a>
+    </div>
+
+    <!-- Loading notice -->
+    <p class="text-[11px] text-gray-400 mt-2">Redirecting automatically in 3 seconds...</p>
+
+  </div>
+
+</body>
+</html>

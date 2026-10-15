@@ -1,0 +1,45 @@
+{
+  "site_name": "PakJobs Portal",
+  "domain": "easy2find.site",
+  "ticker_text": "Latest Updates: PPSC Assistant Director Jobs 2026, PM Youth Business Loans & CM Punjab Solar Scheme Open!",
+  "nav_links": [
+    {
+      "label": "Home",
+      "action": "home"
+    },
+    {
+      "label": "Federal Jobs",
+      "category": "Federal"
+    },
+    {
+      "label": "Punjab Jobs",
+      "category": "Punjab"
+    },
+    {
+      "label": "Govt Schemes",
+      "category": "Schemes"
+    }
+  ],
+  "footer_links": [
+    {
+      "label": "About Us",
+      "page": "about"
+    },
+    {
+      "label": "Contact Us",
+      "page": "contact"
+    },
+    {
+      "label": "Privacy Policy",
+      "page": "privacy"
+    },
+    {
+      "label": "Disclaimer",
+      "page": "disclaimer"
+    },
+    {
+      "label": "Terms of Service",
+      "page": "terms"
+    }
+  ]
+}

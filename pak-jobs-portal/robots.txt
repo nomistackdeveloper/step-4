@@ -1,0 +1,12 @@
+# Allow all search engine crawlers to access public pages
+User-agent: *
+Allow: /
+Allow: /index.html
+Allow: /pages/
+
+# Disallow internal configuration and system directories
+Disallow: /config/
+Disallow: /data/
+
+# Sitemap location for faster indexing by Google Search Console
+Sitemap: https://easy2find.site/sitemap.xml
