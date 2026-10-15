@@ -1,5 +1,5 @@
 /* ==========================================================================
-   PAKJOBS PORTAL - SINGLE JSON FILE APPLICATION SCRIPT
+   PAKJOBS PORTAL - SEPARATED MAIN APPLICATION SCRIPT
    ========================================================================== */
 
 let siteConfig = null;
@@ -10,18 +10,18 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* ==========================================================================
-   1. DATA FETCHING SYSTEM (Single JSON Loader with Cache Buster)
+   1. DATA FETCHING SYSTEM (JSON Loader)
    ========================================================================== */
 async function initializeApp() {
   try {
-    const timestamp = new Date().getTime();
-    const [configRes, dataRes] = await Promise.all([
-      fetch(`config/site-config.json?v=${timestamp}`),
-      fetch(`data/pak-jobs-schemes.json?v=${timestamp}`)
+    // Fetch site configuration and master jobs.json containing all listings
+    const [configRes, jobsRes] = await Promise.all([
+      fetch('config/site-config.json'),
+      fetch('data/jobs.json')
     ]);
 
     siteConfig = await configRes.json();
-    allPostsData = await dataRes.json();
+    allPostsData = await jobsRes.json();
 
     renderHeader();
     renderFooter();
