@@ -68,20 +68,32 @@
     </button>
   </div>
 
-  <!-- INTERACTIVE SEARCH MODAL OVERLAY -->
-  <div id="search-modal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-start justify-center pt-12 px-4 backdrop-blur-sm">
+  <!-- INTERACTIVE SEARCH MODAL WITH EDUCATION FILTER -->
+  <div id="search-modal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-start justify-center pt-10 px-4 backdrop-blur-sm">
     <div class="bg-white w-full max-w-xl rounded-3xl p-5 shadow-2xl border border-gray-200 space-y-4">
       <div class="flex justify-between items-center border-b pb-3">
-        <h3 class="font-extrabold text-gray-900 text-base">🔍 Search Jobs & Schemes</h3>
+        <h3 class="font-extrabold text-gray-900 text-base">🔍 Search & Filter Jobs</h3>
         <button onclick="closeSearchModal()" class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold px-3 py-1 rounded-full text-xs">✕ Close</button>
       </div>
 
       <div class="space-y-3">
-        <div class="relative">
-          <span class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">🔍</span>
-          <input type="text" id="modal-search-input" placeholder="Search by title, department, or keywords (e.g. PPSC, Solar, BISP)..." class="w-full text-xs sm:text-sm pl-11 pr-4 py-3 bg-gray-50 rounded-2xl border border-gray-200 focus:outline-none focus:border-emerald-600 transition" oninput="handleModalSearch(this.value)">
+        <!-- Search Input & Qualification Dropdown Row -->
+        <div class="flex flex-col sm:flex-row gap-2">
+          <div class="relative flex-grow">
+            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">🔍</span>
+            <input type="text" id="modal-search-input" placeholder="Search title or dept (e.g. PPSC, Solar)..." class="w-full text-xs sm:text-sm pl-10 pr-3 py-3 bg-gray-50 rounded-2xl border border-gray-200 focus:outline-none focus:border-emerald-600 transition" oninput="triggerModalSearch()">
+          </div>
+
+          <select id="modal-qual-filter" class="text-xs sm:text-sm p-3 bg-gray-50 rounded-2xl border border-gray-200 focus:outline-none focus:border-emerald-600 font-medium text-gray-700 cursor-pointer" onchange="triggerModalSearch()">
+            <option value="All">🎓 All Qualifications</option>
+            <option value="Matric">Matric / Below</option>
+            <option value="Intermediate">Intermediate (FA/FSc/IT)</option>
+            <option value="Graduation">Graduation / Bachelor</option>
+            <option value="Master">Master Degree</option>
+          </select>
         </div>
 
+        <!-- Trending Tags -->
         <div class="flex items-center gap-2 overflow-x-auto hide-scrollbar py-1">
           <span class="text-[10px] font-bold text-gray-400 uppercase whitespace-nowrap">Trending:</span>
           <button onclick="applyModalSuggestion('PPSC')" class="text-xs bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-semibold px-2.5 py-1 rounded-xl border border-emerald-200 whitespace-nowrap">🔥 PPSC</button>
@@ -91,8 +103,8 @@
         </div>
       </div>
 
-      <div id="modal-search-results" class="max-h-72 overflow-y-auto space-y-2 pt-2 divide-y divide-gray-100">
-        <p class="text-xs text-gray-400 text-center py-4">Start typing above to search instantly...</p>
+      <div id="modal-search-results" class="max-h-64 overflow-y-auto space-y-2 pt-2 divide-y divide-gray-100">
+        <p class="text-xs text-gray-400 text-center py-4">Start typing or select qualification above...</p>
       </div>
     </div>
   </div>
