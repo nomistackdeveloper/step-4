@@ -1,257 +1,285 @@
 /* ==========================================================================
-   PAKJOBS PORTAL - DIRECT DATA APPLICATION SCRIPT (NO FETCH ERRORS)
+   PAKJOBS PORTAL - FINAL SINGLE FILE APPLICATION SCRIPT
    ========================================================================== */
 
-let siteConfig = {
-  site_name: "PakJobs Portal",
-  ticker_text: "Latest: PPSC Assistant Director Jobs 2026 & PM Youth Loan Scheme Open!",
-  nav_links: [
-    { label: "Home", action: "home" },
-    { label: "Federal Jobs", category: "Federal" },
-    { label: "Punjab Jobs", category: "Punjab" },
-    { label: "Govt Schemes", category: "Schemes" }
-  ],
-  footer_links: [
-    { label: "About Us", page: "about" },
-    { label: "Contact Us", page: "contact" },
-    { label: "Privacy Policy", page: "privacy" },
-    { label: "Disclaimer", page: "disclaimer" }
-  ]
-};
-
-// All 10 Jobs & Schemes Loaded Directly
-let allPostsData = [
-  {
-    id: "ppsc-assistant-director-2026",
-    type: "job",
-    category: "Punjab",
-    department: "Punjab Public Service Commission (PPSC)",
-    title_en: "PPSC Assistant Director Recruitment 2026",
-    title_ur: "پنجاب پبلک سروس کمیشن اسسٹنٹ ڈائریکٹر بھرتی 2026",
-    vacancies: "45 Seats",
-    qualification: "Master Degree / Graduation",
-    age_limit: "21 - 30 Years (+ Age Relaxation)",
-    last_date: "November 15, 2026",
-    apply_link: "https://ppsc.gop.pk",
-    views: "1,420",
-    date: "Oct 14, 2026",
-    description_ur: "پنجاب پبلک سروس کمیشن نے محکمہ زراعت اور اینٹی کرپشن میں اسسٹنٹ ڈائریکٹر کی خالی اسامیوں کے لیے آن لائن درخواستیں طلب کر لی ہیں۔ تمام اضلاع کے مرد و خواتین امیدوار مقررہ تاریخ سے پہلے چالان فارم جمع کرا کے آن لائن اپلائی کر سکتے ہیں۔",
-    instructions_ur: [
-      "1. PPSC کی آفیشل ویب سائٹ سے 600 روپے کا چالان فارم ڈاؤن لوڈ کریں۔",
-      "2. 13 ہندسوں کا PSID نمبر استعمال کرتے ہوئے ای پے پنجاب (e-Pay Punjab) یا اے ٹی ایم کے ذریعے فیس ادا کریں۔",
-      "3. آن لائن فارم مکمل پر کر کے تعلیمی اسناد اپلوڈ کریں اور سبمٹ کریں۔"
-    ]
-  },
-  {
-    id: "pm-youth-business-loan-2026",
-    type: "scheme",
-    category: "Schemes",
-    department: "Prime Minister Youth Program",
-    title_en: "PM Youth Business & Agriculture Loan Scheme 2026",
-    title_ur: "وزیراعظم یوتھ بزنس اور ایگریکلچر لون اسکیم 2026",
-    vacancies: "Tier 1, Tier 2 & Tier 3 Loans",
-    qualification: "CNIC Holder (Age 21-45)",
-    age_limit: "21 - 45 Years",
-    last_date: "December 31, 2026",
-    apply_link: "https://pmyp.gov.pk",
-    views: "3,890",
-    date: "Oct 12, 2026",
-    description_ur: "حکومتِ پاکستان کی جانب سے باہمت نوجوانوں کو اپنا کاروبار شروع کرنے اور اسے وسعت دینے کے لیے 5 لاکھ سے 75 لاکھ روپے تک آسان اقساط اور کم سے کم مارک اپ پر قرضے فراہم کیے جا رہے ہیں۔",
-    instructions_ur: [
-      "1. آفیشل پورٹل pmyp.gov.pk پر جائیں۔",
-      "2. اپنا قومی شناختی کارڈ اور موبائل نمبر درج کر کے اکاؤنٹ بنائیں۔",
-      "3. اپنے بزنس پلان کا فارم پر کریں اور درخواست آن لائن جمع کروائیں۔"
-    ]
-  },
-  {
-    id: "fpsc-lecturer-recruitment-2026",
-    type: "job",
-    category: "Federal",
-    department: "Federal Public Service Commission (FPSC)",
-    title_en: "FPSC Male & Female Lecturer Jobs 2026",
-    title_ur: "ایف پی ایس سی لیکچرار بھرتی 2026",
-    vacancies: "120 Seats",
-    qualification: "Master Degree (2nd Division)",
-    age_limit: "22 - 33 Years",
-    last_date: "November 20, 2026",
-    apply_link: "https://fpsc.gov.pk",
-    views: "2,150",
-    date: "Oct 10, 2026",
-    description_ur: "وفاقی سرکاری ڈگری کالجوں میں مختلف مضامین کے لیے مرد اور خواتین لیکچرارز کی آسامیوں کا اعلان کر دیا گیا ہے۔ پورے پاکستان (پنجاب، سندھ، خیبر پختونخوا، بلوچستان) سے امیدوار اپلائی کر سکتے ہیں۔",
-    instructions_ur: [
-      "1. FPSC ویب سائٹ سے چالان فارم ڈاؤن لوڈ کریں۔",
-      "2. نیشنل بینک آف پاکستان (NBP) کی کسی بھی برانچ میں 300 روپے چالان فیس جمع کروائیں۔",
-      "3. آن لائن پورٹل پر جا کر ایپلیکیشن سبمٹ کریں۔"
-    ]
-  },
-  {
-    id: "cm-punjab-solar-scheme-2026",
-    type: "scheme",
-    category: "Schemes",
-    department: "Energy Department Government of Punjab",
-    title_en: "CM Punjab Free Solar Panel Scheme 2026",
-    title_ur: "وزیراعلیٰ پنجاب مفت سولر پینل اسکیم 2026",
-    vacancies: "50,000 Solar Systems",
-    qualification: "Electricity Bill Consumer (Up to 500 Units)",
-    age_limit: "18+ Years",
-    last_date: "November 30, 2026",
-    apply_link: "https://cmsolar.punjab.gov.pk",
-    views: "5,410",
-    date: "Oct 08, 2026",
-    description_ur: "وزیراعلیٰ پنجاب سولر اسکیم کے تحت 500 یونٹ تک بجلی استعمال کرنے والے گھریلو صارفین کو آسان اقساط پر سولر سسٹمز فراہم کیے جا رہے ہیں جبکہ غریب صارفین کو ترجیحی بنیادوں پر سبسڈی دی جا رہی ہے۔",
-    instructions_ur: [
-      "1. اپنا بجلی کا بل اور شناختی کارڈ نمبر ساتھ رکھیں۔",
-      "2. پورٹل پر اپنا بل ریفرنس نمبر درج کریں۔",
-      "3. اہلیت کی تصدیق کے بعد فارم پر کر کے جمع کروائیں۔"
-    ]
-  },
-  {
-    id: "punjab-police-constable-2026",
-    type: "job",
-    category: "Punjab",
-    department: "Punjab Police",
-    title_en: "Punjab Police Constable & Lady Constable Jobs 2026",
-    title_ur: "پنجاب پولیس کانسٹیبل اور لیڈی کانسٹیبل بھرتی 2026",
-    vacancies: "3,500+ Seats",
-    qualification: "Intermediate (FA / FSc / IT)",
-    age_limit: "18 - 25 Years",
-    last_date: "November 25, 2026",
-    apply_link: "https://punjabpolice.gov.pk",
-    views: "4,120",
-    date: "Oct 15, 2026",
-    description_ur: "پنجاب پولیس نے صوبے کے تمام اضلاع کے لیے کانسٹیبل اور لیڈی کانسٹیبل کی خالی اسامیوں کا اعلان کر دیا ہے۔ امیدوار جسمانی پیمائش اور تحریری امتحان کے لیے قریبی پولیس لائنز سے فارم حاصل کر سکتے ہیں۔",
-    instructions_ur: [
-      "1. درخواست فارم پنجاب پولیس کی ویب سائٹ سے ڈاؤن لوڈ کریں۔",
-      "2. مطلوبہ دستاویزات اور فیس کے ساتھ متعلقہ ضلعی پولیس لائن میں جمع کروائیں۔",
-      "3. جسمانی ٹیسٹ کے لیے مقررہ تاریخ پر پہنچیں۔"
-    ]
-  },
-  {
-    id: "cm-punjab-ebike-scheme-2026",
-    type: "scheme",
-    category: "Schemes",
-    department: "Transport Department Punjab",
-    title_en: "CM Punjab Student E-Bike Scheme 2026",
-    title_ur: "وزیراعلیٰ پنجاب اسٹوڈنٹس ای بائیک اسکیم 2026",
-    vacancies: "20,000 Bikes (Petrol & Electric)",
-    qualification: "College / University Students (Intermediate / Graduation)",
-    age_limit: "18 - 30 Years",
-    last_date: "December 15, 2026",
-    apply_link: "https://bikes.punjab.gov.pk",
-    views: "6,750",
-    date: "Oct 11, 2026",
-    description_ur: "طلباء و طالبات کے لیے آسان ماہانہ اقساط پر بغیر سود کے موٹر سائیکل اور ای-بائیکس فراہم کرنے کی اسکیم کا آغاز کر دیا گیا ہے۔ حکومت کی طرف سے بائیکس پر خصوصی سبسڈی دی جا رہی ہے۔",
-    instructions_ur: [
-      "1. اپنا کالج یا یونیورسٹی اسٹوڈنٹ کارڈ ساتھ رکھیں۔",
-      "2. آن لائن پورٹل پر جا کر فارم پُر کریں۔",
-      "3. قرعة اندازی کے نتائج کا انتظار کریں۔"
-    ]
-  },
-  {
-    id: "bisp-kafaalat-program-2026",
-    type: "scheme",
-    category: "Schemes",
-    department: "Benazir Income Support Programme (BISP)",
-    title_en: "BISP Kafaalat 10,500 Quarterly Installment 2026",
-    title_ur: "بینظیر انکم سپورٹ پروگرام کفالت قسط 2026",
-    vacancies: "Nationwide Beneficiaries",
-    qualification: "CNIC Holder / PMT Score Verified",
-    age_limit: "18 - 60 Years",
-    last_date: "Open Ongoing",
-    apply_link: "https://8171.bisp.gov.pk",
-    views: "8,920",
-    date: "Oct 05, 2026",
-    description_ur: "بے نظیر انکم سپورٹ پروگرام کے تحت مستحق خاندانوں کے لیے نئی سہ ماہی قسط 10,500 روپے جاری کر دی گئی ہے۔ اہل خواتین اپنے قریبی بی آئی ایس پی کیش سینٹر یا اے ٹی ایم سے رقم وصول کر سکتی ہیں۔",
-    instructions_ur: [
-      "1. اپنا 13 ہندسوں کا قومی شناختی کارڈ نمبر 8171 پر ایس ایم ایس کریں۔",
-      "2. اہلیت کا پیغام موصول ہونے پر قریبی ریٹیلر پر جائیں۔",
-      "3. بائیو میٹرک تصدیق کے بعد رقم وصول کریں۔"
-    ]
-  },
-  {
-    id: "pakistan-railways-jobs-2026",
-    type: "job",
-    category: "Federal",
-    department: "Pakistan Railways Headquarters",
-    title_en: "Pakistan Railways Junior Clerk & Technician Jobs 2026",
-    title_ur: "پاکستان ریلویز جونیئر کلرک اور ٹیکنیشین جابز 2026",
-    vacancies: "280 Seats",
-    qualification: "Matric / Intermediate / DAE",
-    age_limit: "18 - 28 Years",
-    last_date: "November 18, 2026",
-    apply_link: "https://pakrail.gov.pk",
-    views: "1,940",
-    date: "Oct 09, 2026",
-    description_ur: "پاکستان ریلویز نے ملک بھر کے تمام ڈویژنز کے لیے جونیئر کلرکس، اسسٹنٹس اور فنی عملے کی خالی اسامیوں پر بھرتی کے لیے امیدواروں سے درخواستیں طلب کی ہیں۔",
-    instructions_ur: [
-      "1. ریلویز کی ویب سائٹ سے درخواست فارم ڈاؤن لوڈ کریں۔",
-      "2. بینک ڈرافٹ یا پوستال آرڈر کے ساتھ تمام دستاویزات ہیڈ کوارٹر ارسال کریں۔",
-      "3. ٹیسٹ اور انٹرویو کی تاریخ کا نوٹس ویب سائٹ پر چیک کریں۔"
-    ]
-  },
-  {
-    id: "pak-army-soldier-2026",
-    type: "job",
-    category: "Federal",
-    department: "Pakistan Army",
-    title_en: "Join Pakistan Army as Soldier (Sipahi) 2026",
-    title_ur: "پاک فوج بطور سپاہی شمولیت 2026",
-    vacancies: "Multiple Openings",
-    qualification: "Matric or Above",
-    age_limit: "17.5 - 23 Years",
-    last_date: "November 22, 2026",
-    apply_link: "https://joinpakarmy.gov.pk",
-    views: "4,830",
-    date: "Oct 13, 2026",
-    description_ur: "پاک فوج میں بطور سپاہی، کلرک، اور کک شمولیت کے لیے رجسٹریشن کا آغاز کر دیا گیا ہے۔ تمام امیدوار آن لائن یا قریبی آرمی سلیکشن اینڈ ریکروٹمنٹ سینٹر کے ذریعے رجسٹریشن کر سکتے ہیں۔",
-    instructions_ur: [
-      "1. آفیشل ویب سائٹ joinpakarmy.gov.pk پر جائیں۔",
-      "2. آن لائن رجسٹریشن فارم پُر کریں اور رول نمبر سلپ حاصل کریں۔",
-      "3. ابتدائی طبی اور تعلیمی ٹیسٹ کے لیے مقررہ مرکز پر حاضر ہوں۔"
-    ]
-  },
-  {
-    id: "hec-indigenous-scholarship-2026",
-    type: "scheme",
-    category: "Schemes",
-    department: "Higher Education Commission (HEC)",
-    title_en: "HEC Indigenous MS & PhD Scholarship 2026",
-    title_ur: "ایچ ای سی انڈیجینس ایم ایس اور پی ایچ ڈی اسکالرشپ 2026",
-    vacancies: "1,000 Scholarships",
-    qualification: "BS / Master Degree (16 Years Education)",
-    age_limit: "Up to 35 Years",
-    last_date: "December 10, 2026",
-    apply_link: "https://hec.gov.pk",
-    views: "3,120",
-    date: "Oct 07, 2026",
-    description_ur: "ہائر ایجوکیشن کمیشن (HEC) نے پاکستان کی نامور یونیورسٹیوں میں ایم ایس اور پی ایچ ڈی کی تعلیم جاری رکھنے والے ہونہار طلباء کے لیے مکمل مالی معاونت اور ماہانہ وظیفہ اسکالرشپ کا اعلان کیا ہے۔",
-    instructions_ur: [
-      "1. HEC ایجوکیشن پورٹل پر اپنا پروفائل بنائیں۔",
-      "2. اسکالرشپ پورٹل پر جا کر آن لائن درخواست جمع کروائیں۔",
-      "3. درکار دستاویزات کی اسکین کاپیاں اپ لوڈ کریں۔"
-    ]
-  }
-];
+let siteConfig = null;
+let allPostsData = [];
 
 document.addEventListener('DOMContentLoaded', () => {
   initializeApp();
 });
 
 /* ==========================================================================
-   1. INITIALIZATION SYSTEM
+   1. DATA FETCHING SYSTEM (Single JSON Loader with Cache Buster & Fallback)
    ========================================================================== */
-function initializeApp() {
+async function initializeApp() {
+  try {
+    const timestamp = new Date().getTime();
+    const [configRes, dataRes] = await Promise.all([
+      fetch(`config/site-config.json?v=${timestamp}`),
+      fetch(`data/pak-jobs-schemes.json?v=${timestamp}`)
+    ]);
+
+    if (!configRes.ok || !dataRes.ok) {
+      throw new Error("Failed to fetch JSON configuration or data files.");
+    }
+
+    siteConfig = await configRes.json();
+    allPostsData = await dataRes.json();
+
+    renderHeader();
+    renderFooter();
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const jobId = urlParams.get('id');
+
+    if (jobId) {
+      router('detail', jobId);
+    } else {
+      router('home');
+    }
+
+  } catch (error) {
+    console.warn("Fetch failed or running locally without server, activating fallback data...", error);
+    useFallbackData();
+  }
+}
+
+function useFallbackData() {
+  siteConfig = {
+    site_name: "PakJobs Portal",
+    ticker_text: "Latest: PPSC Assistant Director Jobs 2026 & PM Youth Loan Scheme Open!",
+    nav_links: [
+      { label: "Home", action: "home" },
+      { label: "Federal Jobs", category: "Federal" },
+      { label: "Punjab Jobs", category: "Punjab" },
+      { label: "Govt Schemes", category: "Schemes" }
+    ],
+    footer_links: [
+      { label: "About Us", page: "about" },
+      { label: "Contact Us", page: "contact" },
+      { label: "Privacy Policy", page: "privacy" },
+      { label: "Disclaimer", page: "disclaimer" }
+    ]
+  };
+
+  // Complete Fallback dataset ensuring all listings display even if fetch is blocked locally
+  allPostsData = [
+    {
+      id: "ppsc-assistant-director-2026",
+      type: "job",
+      category: "Punjab",
+      department: "Punjab Public Service Commission (PPSC)",
+      title_en: "PPSC Assistant Director Recruitment 2026",
+      title_ur: "پنجاب پبلک سروس کمیشن اسسٹنٹ ڈائریکٹر بھرتی 2026",
+      vacancies: "45 Seats",
+      qualification: "Master Degree / Graduation",
+      age_limit: "21 - 30 Years (+ Age Relaxation)",
+      last_date: "November 15, 2026",
+      apply_link: "https://ppsc.gop.pk",
+      views: "1,420",
+      date: "Oct 14, 2026",
+      description_ur: "پنجاب پبلک سروس کمیشن نے محکمہ زراعت اور اینٹی کرپشن میں اسسٹنٹ ڈائریکٹر کی خالی اسامیوں کے لیے آن لائن درخواستیں طلب کر لی ہیں۔ تمام اضلاع کے مرد و خواتین امیدوار مقررہ تاریخ سے پہلے چالان فارم جمع کرا کے آن لائن اپلائی کر سکتے ہیں۔",
+      instructions_ur: [
+        "1. PPSC کی آفیشل ویب سائٹ سے 600 روپے کا چالان فارم ڈاؤن لوڈ کریں۔",
+        "2. 13 ہندسوں کا PSID نمبر استعمال کرتے ہوئے ای پے پنجاب (e-Pay Punjab) یا اے ٹی ایم کے ذریعے فیس ادا کریں۔",
+        "3. آن لائن فارم مکمل پر کر کے تعلیمی اسناد اپلوڈ کریں اور سبمٹ کریں۔"
+      ]
+    },
+    {
+      id: "pm-youth-business-loan-2026",
+      type: "scheme",
+      category: "Schemes",
+      department: "Prime Minister Youth Program",
+      title_en: "PM Youth Business & Agriculture Loan Scheme 2026",
+      title_ur: "وزیراعظم یوتھ بزنس اور ایگریکلچر لون اسکیم 2026",
+      vacancies: "Tier 1, Tier 2 & Tier 3 Loans",
+      qualification: "CNIC Holder (Age 21-45)",
+      age_limit: "21 - 45 Years",
+      last_date: "December 31, 2026",
+      apply_link: "https://pmyp.gov.pk",
+      views: "3,890",
+      date: "Oct 12, 2026",
+      description_ur: "حکومتِ پاکستان کی جانب سے باہمت نوجوانوں کو اپنا کاروبار شروع کرنے اور اسے وسعت دینے کے لیے 5 لاکھ سے 75 لاکھ روپے تک آسان اقساط اور کم سے کم مارک اپ پر قرضے فراہم کیے جا رہے ہیں۔",
+      instructions_ur: [
+        "1. آفیشل پورٹل pmyp.gov.pk پر جائیں۔",
+        "2. اپنا قومی شناختی کارڈ اور موبائل نمبر درج کر کے اکاؤنٹ بنائیں۔",
+        "3. اپنے بزنس پلان کا فارم پر کریں اور درخواست آن لائن جمع کروائیں۔"
+      ]
+    },
+    {
+      id: "fpsc-lecturer-recruitment-2026",
+      type: "job",
+      category: "Federal",
+      department: "Federal Public Service Commission (FPSC)",
+      title_en: "FPSC Male & Female Lecturer Jobs 2026",
+      title_ur: "ایف پی ایس سی لیکچرار بھرتی 2026",
+      vacancies: "120 Seats",
+      qualification: "Master Degree (2nd Division)",
+      age_limit: "22 - 33 Years",
+      last_date: "November 20, 2026",
+      apply_link: "https://fpsc.gov.pk",
+      views: "2,150",
+      date: "Oct 10, 2026",
+      description_ur: "وفاقی سرکاری ڈگری کالجوں میں مختلف مضامین کے لیے مرد اور خواتین لیکچرارز کی آسامیوں کا اعلان کر دیا گیا ہے۔ پورے پاکستان (پنجاب، سندھ، خیبر پختونخوا، بلوچستان) سے امیدوار اپلائی کر سکتے ہیں۔",
+      instructions_ur: [
+        "1. FPSC ویب سائٹ سے چالان فارم ڈاؤن لوڈ کریں۔",
+        "2. نیشنل بینک آف پاکستان (NBP) کی کسی بھی برانچ میں 300 روپے چالان فیس جمع کروائیں۔",
+        "3. آن لائن پورٹل پر جا کر ایپلیکیشن سبمٹ کریں۔"
+      ]
+    },
+    {
+      id: "cm-punjab-solar-scheme-2026",
+      type: "scheme",
+      category: "Schemes",
+      department: "Energy Department Government of Punjab",
+      title_en: "CM Punjab Free Solar Panel Scheme 2026",
+      title_ur: "وزیراعلیٰ پنجاب مفت سولر پینل اسکیم 2026",
+      vacancies: "50,000 Solar Systems",
+      qualification: "Electricity Bill Consumer (Up to 500 Units)",
+      age_limit: "18+ Years",
+      last_date: "November 30, 2026",
+      apply_link: "https://cmsolar.punjab.gov.pk",
+      views: "5,410",
+      date: "Oct 08, 2026",
+      description_ur: "وزیراعلیٰ پنجاب سولر اسکیم کے تحت 500 یونٹ تک بجلی استعمال کرنے والے گھریلو صارفین کو آسان اقساط پر سولر سسٹمز فراہم کیے جا رہے ہیں جبکہ غریب صارفین کو ترجیحی بنیادوں پر سبسڈی دی جا رہی ہے۔",
+      instructions_ur: [
+        "1. اپنا بجلی کا بل اور شناختی کارڈ نمبر ساتھ رکھیں۔",
+        "2. پورٹل پر اپنا بل ریفرنس نمبر درج کریں۔",
+        "3. اہلیت کی تصدیق کے بعد فارم پر کر کے جمع کروائیں۔"
+      ]
+    },
+    {
+      id: "punjab-police-constable-2026",
+      type: "job",
+      category: "Punjab",
+      department: "Punjab Police",
+      title_en: "Punjab Police Constable & Lady Constable Jobs 2026",
+      title_ur: "پنجاب پولیس کانسٹیبل اور لیڈی کانسٹیبل بھرتی 2026",
+      vacancies: "3,500+ Seats",
+      qualification: "Intermediate (FA / FSc / IT)",
+      age_limit: "18 - 25 Years",
+      last_date: "November 25, 2026",
+      apply_link: "https://punjabpolice.gov.pk",
+      views: "4,120",
+      date: "Oct 15, 2026",
+      description_ur: "پنجاب پولیس نے صوبے کے تمام اضلاع کے لیے کانسٹیبل اور لیڈی کانسٹیبل کی خالی اسامیوں کا اعلان کر دیا ہے۔ امیدوار جسمانی پیمائش اور تحریری امتحان کے لیے قریبی پولیس لائنز سے فارم حاصل کر سکتے ہیں۔",
+      instructions_ur: [
+        "1. درخواست فارم پنجاب پولیس کی ویب سائٹ سے ڈاؤن لوڈ کریں۔",
+        "2. مطلوبہ دستاویزات اور فیس کے ساتھ متعلقہ ضلعی پولیس لائن میں جمع کروائیں۔",
+        "3. جسمانی ٹیسٹ کے لیے مقررہ تاریخ پر پہنچیں۔"
+      ]
+    },
+    {
+      id: "cm-punjab-ebike-scheme-2026",
+      type: "scheme",
+      category: "Schemes",
+      department: "Transport Department Punjab",
+      title_en: "CM Punjab Student E-Bike Scheme 2026",
+      title_ur: "وزیراعلیٰ پنجاب اسٹوڈنٹس ای بائیک اسکیم 2026",
+      vacancies: "20,000 Bikes (Petrol & Electric)",
+      qualification: "College / University Students (Intermediate / Graduation)",
+      age_limit: "18 - 30 Years",
+      last_date: "December 15, 2026",
+      apply_link: "https://bikes.punjab.gov.pk",
+      views: "6,750",
+      date: "Oct 11, 2026",
+      description_ur: "طلباء و طالبات کے لیے آسان ماہانہ اقساط پر بغیر سود کے موٹر سائیکل اور ای-بائیکس فراہم کرنے کی اسکیم کا آغاز کر دیا گیا ہے۔ حکومت کی طرف سے بائیکس پر خصوصی سبسڈی دی جا رہی ہے۔",
+      instructions_ur: [
+        "1. اپنا کالج یا یونیورسٹی اسٹوڈنٹ کارڈ ساتھ رکھیں۔",
+        "2. آن لائن پورٹل پر جا کر فارم پُر کریں۔",
+        "3. قرعة اندازی کے نتائج کا انتظار کریں۔"
+      ]
+    },
+    {
+      id: "bisp-kafaalat-program-2026",
+      type: "scheme",
+      category: "Schemes",
+      department: "Benazir Income Support Programme (BISP)",
+      title_en: "BISP Kafaalat 10,500 Quarterly Installment 2026",
+      title_ur: "بینظیر انکم سپورٹ پروگرام کفالت قسط 2026",
+      vacancies: "Nationwide Beneficiaries",
+      qualification: "CNIC Holder / PMT Score Verified",
+      age_limit: "18 - 60 Years",
+      last_date: "Open Ongoing",
+      apply_link: "https://8171.bisp.gov.pk",
+      views: "8,920",
+      date: "Oct 05, 2026",
+      description_ur: "بے نظیر انکم سپورٹ پروگرام کے تحت مستحق خاندانوں کے لیے نئی سہ ماہی قسط 10,500 روپے جاری کر دی گئی ہے۔ اہل خواتین اپنے قریبی بی آئی ایس پی کیش سینٹر یا اے ٹی ایم سے رقم وصول کر سکتی ہیں۔",
+      instructions_ur: [
+        "1. اپنا 13 ہندسوں کا قومی شناختی کارڈ نمبر 8171 پر ایس ایم ایس کریں۔",
+        "2. اہلیت کا پیغام موصول ہونے پر قریبی ریٹیلر پر جائیں۔",
+        "3. بائیو میٹرک تصدیق کے بعد رقم وصول کریں۔"
+      ]
+    },
+    {
+      id: "pakistan-railways-jobs-2026",
+      type: "job",
+      category: "Federal",
+      department: "Pakistan Railways Headquarters",
+      title_en: "Pakistan Railways Junior Clerk & Technician Jobs 2026",
+      title_ur: "پاکستان ریلویز جونیئر کلرک اور ٹیکنیشین جابز 2026",
+      vacancies: "280 Seats",
+      qualification: "Matric / Intermediate / DAE",
+      age_limit: "18 - 28 Years",
+      last_date: "November 18, 2026",
+      apply_link: "https://pakrail.gov.pk",
+      views: "1,940",
+      date: "Oct 09, 2026",
+      description_ur: "پاکستان ریلویز نے ملک بھر کے تمام ڈویژنز کے لیے جونیئر کلرکس، اسسٹنٹس اور فنی عملے کی خالی اسامیوں پر بھرتی کے لیے امیدواروں سے درخواستیں طلب کی ہیں۔",
+      instructions_ur: [
+        "1. ریلویز کی ویب سائٹ سے درخواست فارم ڈاؤن لوڈ کریں۔",
+        "2. بینک ڈرافٹ یا پوستال آرڈر کے ساتھ تمام دستاویزات ہیڈ کوارٹر ارسال کریں۔",
+        "3. ٹیسٹ اور انٹرویو کی تاریخ کا نوٹس ویب سائٹ پر چیک کریں۔"
+      ]
+    },
+    {
+      id: "pak-army-soldier-2026",
+      type: "job",
+      category: "Federal",
+      department: "Pakistan Army",
+      title_en: "Join Pakistan Army as Soldier (Sipahi) 2026",
+      title_ur: "پاک فوج بطور سپاہی شمولیت 2026",
+      vacancies: "Multiple Openings",
+      qualification: "Matric or Above",
+      age_limit: "17.5 - 23 Years",
+      last_date: "November 22, 2026",
+      apply_link: "https://joinpakarmy.gov.pk",
+      views: "4,830",
+      date: "Oct 13, 2026",
+      description_ur: "پاک فوج میں بطور سپاہی، کلرک، اور کک شمولیت کے لیے رجسٹریشن کا آغاز کر دیا گیا ہے۔ تمام امیدوار آن لائن یا قریبی آرمی سلیکشن اینڈ ریکروٹمنٹ سینٹر کے ذریعے رجسٹریشن کر سکتے ہیں۔",
+      instructions_ur: [
+        "1. آفیشل ویب سائٹ joinpakarmy.gov.pk پر جائیں۔",
+        "2. آن لائن رجسٹریشن فارم پُر کریں اور رول نمبر سلپ حاصل کریں۔",
+        "3. ابتدائی طبی اور تعلیمی ٹیسٹ کے لیے مقررہ مرکز پر حاضر ہوں۔"
+      ]
+    },
+    {
+      id: "hec-indigenous-scholarship-2026",
+      type: "scheme",
+      category: "Schemes",
+      department: "Higher Education Commission (HEC)",
+      title_en: "HEC Indigenous MS & PhD Scholarship 2026",
+      title_ur: "ایچ ای سی انڈیجینس ایم ایس اور پی ایچ ڈی اسکالرشپ 2026",
+      vacancies: "1,000 Scholarships",
+      qualification: "BS / Master Degree (16 Years Education)",
+      age_limit: "Up to 35 Years",
+      last_date: "December 10, 2026",
+      apply_link: "https://hec.gov.pk",
+      views: "3,120",
+      date: "Oct 07, 2026",
+      description_ur: "ہائر ایجوکیشن کمیشن (HEC) نے پاکستان کی نامور یونیورسٹیوں میں ایم ایس اور پی ایچ ڈی کی تعلیم جاری رکھنے والے ہونہار طلباء کے لیے مکمل مالی معاونت اور ماہانہ وظیفہ اسکالرشپ کا اعلان کیا ہے۔",
+      instructions_ur: [
+        "1. HEC ایجوکیشن پورٹل پر اپنا پروفائل بنائیں۔",
+        "2. اسکالرشپ پورٹل پر جا کر آن لائن درخواست جمع کروائیں۔",
+        "3. درکار دستاویزات کی اسکین کاپیاں اپ لوڈ کریں۔"
+      ]
+    }
+  ];
+
   renderHeader();
   renderFooter();
-
-  const urlParams = new URLSearchParams(window.location.search);
-  const jobId = urlParams.get('id');
-
-  if (jobId) {
-    router('detail', jobId);
-  } else {
-    router('home');
-  }
+  router('home');
 }
 
 /* ==========================================================================
@@ -535,7 +563,7 @@ function renderStaticPage(pageKey) {
 }
 
 /* ==========================================================================
-   4. ADVANCED SEARCH & FILTER MODAL SYSTEM
+   4. ADVANCED SEARCH & FILTER MODAL SYSTEM (Education + Field)
    ========================================================================== */
 function openSearchModal() {
   const modal = document.getElementById("search-modal");
@@ -571,12 +599,14 @@ function triggerModalSearch() {
 
   let filtered = allPostsData;
 
+  // 1. Filter by Qualification Dropdown
   if (selectedQual !== "All") {
     filtered = filtered.filter(item => 
       (item.qualification || "").toLowerCase().includes(selectedQual.toLowerCase())
     );
   }
 
+  // 2. Filter by Field / Sector Dropdown
   if (selectedField !== "All") {
     filtered = filtered.filter(item => 
       (item.title_en || "").toLowerCase().includes(selectedField.toLowerCase()) ||
@@ -585,6 +615,7 @@ function triggerModalSearch() {
     );
   }
 
+  // 3. Filter by Search Query
   if (query.trim() !== "") {
     const q = query.toLowerCase();
     filtered = filtered.filter(item => 
