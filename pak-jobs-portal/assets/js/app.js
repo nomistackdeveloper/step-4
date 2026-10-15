@@ -367,7 +367,7 @@ function renderStaticPage(pageKey) {
 }
 
 /* ==========================================================================
-   4. INTERACTIVE SEARCH MODAL SYSTEM WITH QUALIFICATION FILTER
+   4. ADVANCED SEARCH & FILTER MODAL SYSTEM (Education + Field)
    ========================================================================== */
 function openSearchModal() {
   const modal = document.getElementById("search-modal");
@@ -396,6 +396,7 @@ function applyModalSuggestion(keyword) {
 function triggerModalSearch() {
   const query = document.getElementById("modal-search-input")?.value || "";
   const selectedQual = document.getElementById("modal-qual-filter")?.value || "All";
+  const selectedField = document.getElementById("modal-field-filter")?.value || "All";
   const resultsContainer = document.getElementById("modal-search-results");
   
   if (!resultsContainer) return;
@@ -409,7 +410,16 @@ function triggerModalSearch() {
     );
   }
 
-  // 2. Filter by Search Query
+  // 2. Filter by Field / Sector Dropdown
+  if (selectedField !== "All") {
+    filtered = filtered.filter(item => 
+      (item.title_en || "").toLowerCase().includes(selectedField.toLowerCase()) ||
+      (item.department || "").toLowerCase().includes(selectedField.toLowerCase()) ||
+      (item.category || "").toLowerCase().includes(selectedField.toLowerCase())
+    );
+  }
+
+  // 3. Filter by Search Query
   if (query.trim() !== "") {
     const q = query.toLowerCase();
     filtered = filtered.filter(item => 
@@ -421,7 +431,7 @@ function triggerModalSearch() {
   }
 
   if (filtered.length === 0) {
-    resultsContainer.innerHTML = `<p class="text-xs text-gray-500 text-center py-4">No matching listings found for your search/filter.</p>`;
+    resultsContainer.innerHTML = `<p class="text-xs text-gray-500 text-center py-4">No matching listings found for your selected filters.</p>`;
     return;
   }
 
