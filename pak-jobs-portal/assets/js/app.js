@@ -9,25 +9,35 @@ document.addEventListener('DOMContentLoaded', () => {
   initializeApp();
 });
 
-/* ==========================================================================
-   1. DATA INITIALIZATION SYSTEM (Connecting local JS data file & site config)
-   ========================================================================== */
 async function initializeApp() {
   try {
-    // 1. Fetch site configuration JSON
-    const timestamp = new Date().getTime();
-    const configRes = await fetch(`config/site-config.json?v=${timestamp}`);
+    const configRes = await fetch('config/site-config.json');
     siteConfig = await configRes.json();
 
-    // 2. Load data from your pak-jobs-schemes.js file properly
-    if (typeof pakJobsData !== 'undefined') {
+    // Directly load the global array since pak-jobs-schemes.js is linked in HTML
+    if (typeof allPostsData !== 'undefined' && allPostsData.length > 0) {
+      // Already loaded via script tag
+    } else if (typeof pakJobsData !== 'undefined') {
       allPostsData = pakJobsData;
-    } else if (typeof allJobsData !== 'undefined') {
-      allPostsData = allJobsData;
-    } else {
-      throw new Error('pakJobsData array not found. Ensure data/pak-jobs-schemes.js is included before app.js in your HTML.');
     }
 
+    renderHeader();
+    renderFooter();
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const jobId = urlParams.get('id');
+
+    if (jobId) {
+      router('detail', jobId);
+    } else {
+      router('home');
+    }
+
+  } catch (error) {
+    console.error("Error initializing app:", error);
+    useFallbackData();
+  }
+}
     renderHeader();
     renderFooter();
 
