@@ -1,5 +1,5 @@
 /* ==========================================================================
-   PAKJOBS PORTAL - 100% BULLETPROOF MOBILE SCRIPT (NO FETCH)
+   PAKJOBS PORTAL - UPDATED APPLICATION SCRIPT (WITH VIDEO & SOCIAL SHARE)
    ========================================================================== */
 
 let siteConfig = {
@@ -32,7 +32,6 @@ document.addEventListener('DOMContentLoaded', () => {
    ========================================================================== */
 function initializeApp() {
   try {
-    // Load data directly from pak-jobs-schemes.js global variable
     if (typeof pakJobsData !== 'undefined') {
       allPostsData = pakJobsData;
     } else if (typeof allJobsData !== 'undefined') {
@@ -227,6 +226,8 @@ function renderDetailPage(itemId) {
   const app = document.getElementById("app-content");
   if (!app) return;
 
+  const currentUrl = window.location.href;
+
   app.innerHTML = `
     <nav class="text-xs text-gray-500 flex items-center gap-2">
       <button onclick="router('home')" class="hover:text-emerald-700">Home</button>
@@ -239,15 +240,30 @@ function renderDetailPage(itemId) {
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <article class="lg:col-span-2 space-y-5">
         
+        <!-- Header Info -->
         <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-200">
           <div class="flex flex-wrap gap-2 items-center mb-2">
             <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-2.5 py-0.5 rounded-full uppercase">${item.category}</span>
             <span class="text-xs text-gray-400">Posted on: ${item.date}</span>
+            <span class="text-xs text-gray-400 ml-auto">👁️ ${item.views} Views</span>
           </div>
           <h1 class="text-xl sm:text-2xl font-black text-gray-900 leading-snug">${item.title_en}</h1>
           <p class="font-urdu text-sm text-emerald-900 mt-2 text-right">${item.title_ur}</p>
         </div>
 
+        <!-- YouTube Video Embed Player -->
+        ${item.youtube_video_id ? `
+        <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-200 space-y-2">
+          <h3 class="font-bold text-gray-900 text-sm flex items-center gap-2">
+            ▶️ <span>Live Video Tutorial / How to Apply</span>
+          </h3>
+          <div class="relative w-full aspect-video rounded-xl overflow-hidden bg-black shadow-inner">
+            <iframe class="w-full h-full" src="https://www.youtube.com/embed/${item.youtube_video_id}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          </div>
+        </div>
+        ` : ''}
+
+        <!-- Quick Summary & Eligibility -->
         <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-200 space-y-4">
           <h2 class="text-sm font-bold text-gray-900 border-b pb-2 flex items-center gap-2">
             📌 <span>Quick Summary & Eligibility</span>
@@ -277,18 +293,27 @@ function renderDetailPage(itemId) {
             <strong class="text-red-700 text-base font-bold">${item.last_date}</strong>
           </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-            <a href="${item.apply_link}" target="_blank" rel="noopener noreferrer" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-center py-3 px-4 rounded-xl text-sm transition shadow-sm flex items-center justify-center gap-2">
-              ✅ <span>Apply Online Now</span>
+          <!-- Action Buttons: Apply Online, Official Site & Form -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-2">
+            <a href="${item.apply_link}" target="_blank" rel="noopener noreferrer" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-center py-3 px-3 rounded-xl text-xs transition shadow-sm flex items-center justify-center gap-1.5">
+              ✅ <span>Apply Online</span>
             </a>
-            <button onclick="shareWhatsApp('${item.title_en}')" class="bg-green-600 hover:bg-green-700 text-white font-bold text-center py-3 px-4 rounded-xl text-sm transition shadow-sm flex items-center justify-center gap-2">
-              📲 <span>Share on WhatsApp</span>
-            </button>
+            ${item.official_site_link ? `
+            <a href="${item.official_site_link}" target="_blank" rel="noopener noreferrer" class="bg-blue-600 hover:bg-blue-700 text-white font-bold text-center py-3 px-3 rounded-xl text-xs transition shadow-sm flex items-center justify-center gap-1.5">
+              🌐 <span>Official Website</span>
+            </a>
+            ` : ''}
+            ${item.application_form_link ? `
+            <a href="${item.application_form_link}" target="_blank" rel="noopener noreferrer" class="bg-amber-600 hover:bg-amber-700 text-white font-bold text-center py-3 px-3 rounded-xl text-xs transition shadow-sm flex items-center justify-center gap-1.5">
+              📄 <span>Download Form</span>
+            </a>
+            ` : ''}
           </div>
         </div>
 
+        <!-- Detailed Description & Instructions -->
         <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-200 space-y-3">
-          <h3 class="font-bold text-gray-900 text-sm border-b pb-2">تفصیلات اور اپلائی کرنے کا طریقہ (Urdu Details)</h3>
+          <h3 class="font-bold text-gray-900 text-sm border-b pb-2">تفصیلات اور اپلائی کرنے کا طریقہ (Complete Details)</h3>
           <p class="font-urdu text-sm text-gray-800 leading-loose text-right">${item.description_ur}</p>
           
           <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-100 mt-3 space-y-2">
@@ -296,6 +321,27 @@ function renderDetailPage(itemId) {
             ${item.instructions_ur ? item.instructions_ur.map(inst => `
               <p class="font-urdu text-xs text-emerald-950 text-right">${inst}</p>
             `).join('') : ''}
+          </div>
+        </div>
+
+        <!-- Social Media Share Section -->
+        <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-200 space-y-3">
+          <h3 class="font-bold text-gray-900 text-sm border-b pb-2 flex items-center gap-2">
+            📢 <span>Share this Job / Scheme with Friends</span>
+          </h3>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+            <button onclick="shareWhatsApp('${item.title_en}', '${currentUrl}')" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 px-3 rounded-xl transition flex items-center justify-center gap-1.5">
+              💬 WhatsApp
+            </button>
+            <button onclick="shareFacebook('${currentUrl}')" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-3 rounded-xl transition flex items-center justify-center gap-1.5">
+              👥 Facebook
+            </button>
+            <button onclick="shareTwitter('${item.title_en}', '${currentUrl}')" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-2.5 px-3 rounded-xl transition flex items-center justify-center gap-1.5">
+              🐦 Twitter/X
+            </button>
+            <button onclick="copyToClipboard('${currentUrl}')" class="bg-gray-700 hover:bg-gray-800 text-white font-bold py-2.5 px-3 rounded-xl transition flex items-center justify-center gap-1.5">
+              📋 Copy Link
+            </button>
           </div>
         </div>
 
@@ -420,9 +466,26 @@ function triggerModalSearch() {
 }
 
 /* ==========================================================================
-   5. UTILITY FUNCTIONS
+   5. UTILITY FUNCTIONS (Social Media Sharing)
    ========================================================================== */
-function shareWhatsApp(title) {
-  const text = encodeURIComponent(`Check out this job update: ${title} on ${window.location.href}`);
+function shareWhatsApp(title, url) {
+  const text = encodeURIComponent(`🔥 Check out this Govt Job / Scheme:\n*${title}*\n\nGet complete details & apply here: ${url}`);
   window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
+}
+
+function shareFacebook(url) {
+  window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
+}
+
+function shareTwitter(title, url) {
+  const text = encodeURIComponent(`Check out ${title} on PakJobs Portal:`);
+  window.open(`https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(url)}`, '_blank');
+}
+
+function copyToClipboard(url) {
+  navigator.clipboard.writeText(url).then(() => {
+    alert("🔗 Job link copied to clipboard successfully!");
+  }).catch(err => {
+    console.error("Failed to copy: ", err);
+  });
 }
