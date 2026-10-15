@@ -84,24 +84,129 @@
     ]
   },
   {
-  "id": "naya-job-id-2026",
-  "type": "job",
-  "category": "Punjab", 
-  "department": "Punjab Police",
-  "title_en": "constable",
-  "title_ur": "اردو میں جاب کا نام (مثلاً: ایجوکیٹرز جابز 2026)",
-  "vacancies": "150 Seats",
-  "qualification": "Graduation / Master Degree",
-  "age_limit": "21 - 35 Years",
-  "last_date": "November 30, 2026",
-  "apply_link": "https://official-website-link.com",
-  "views": "150",
-  "date": "Oct 30, 2026",
-  "description_ur": "یہاں تفصیلی معلومات اردو میں لکھیں کہ کون کون اپلائی کر سکتا ہے اور کیا طریقہ کار ہے۔",
-  "instructions_ur": [
-    "1. آفیشل ویب سائٹ پر جائیں۔",
-    "2. آن لائن فارم پُر کریں۔",
-    "3. فیس جمع کروائیں۔"
-  ]
-}
+    "id": "punjab-police-constable-2026",
+    "type": "job",
+    "category": "Punjab",
+    "department": "Punjab Police",
+    "title_en": "Punjab Police Constable & Lady Constable Jobs 2026",
+    "title_ur": "پنجاب پولیس کانسٹیبل اور لیڈی کانسٹیبل بھرتی 2026",
+    "vacancies": "3,500+ Seats",
+    "qualification": "Intermediate (FA / FSc / IT)",
+    "age_limit": "18 - 25 Years",
+    "last_date": "November 25, 2026",
+    "apply_link": "https://punjabpolice.gov.pk",
+    "views": "4,120",
+    "date": "Oct 15, 2026",
+    "description_ur": "پنجاب پولیس نے صوبے کے تمام اضلاع کے لیے کانسٹیبل اور لیڈی کانسٹیبل کی خالی اسامیوں کا اعلان کر دیا ہے۔ امیدوار جسمانی پیمائش اور تحریری امتحان کے لیے قریبی پولیس لائنز سے فارم حاصل کر سکتے ہیں۔",
+    "instructions_ur": [
+      "1. درخواست فارم پنجاب پولیس کی ویب سائٹ سے ڈاؤن لوڈ کریں۔",
+      "2. مطلوبہ دستاویزات اور فیس کے ساتھ متعلقہ ضلعی پولیس لائن میں جمع کروائیں۔",
+      "3. جسمانی ٹیسٹ کے لیے مقررہ تاریخ پر پہنچیں۔"
+    ]
+  },
+  {
+    "id": "cm-punjab-ebike-scheme-2026",
+    "type": "scheme",
+    "category": "Schemes",
+    "department": "Transport Department Punjab",
+    "title_en": "CM Punjab Student E-Bike Scheme 2026",
+    "title_ur": "وزیراعلیٰ پنجاب اسٹوڈنٹس ای بائیک اسکیم 2026",
+    "vacancies": "20,000 Bikes (Petrol & Electric)",
+    "qualification": "College / University Students (Intermediate / Graduation)",
+    "age_limit": "18 - 30 Years",
+    "last_date": "December 15, 2026",
+    "apply_link": "https://bikes.punjab.gov.pk",
+    "views": "6,750",
+    "date": "Oct 11, 2026",
+    "description_ur": "طلباء و طالبات کے لیے آسان ماہانہ اقساط پر بغیر سود کے موٹر سائیکل اور ای-بائیکس فراہم کرنے کی اسکیم کا آغاز کر دیا گیا ہے۔ حکومت کی طرف سے بائیکس پر خصوصی سبسڈی دی جا رہی ہے۔",
+    "instructions_ur": [
+      "1. اپنا کالج یا یونیورسٹی اسٹوڈنٹ کارڈ ساتھ رکھیں۔",
+      "2. آن لائن پورٹل پر جا کر فارم پُر کریں۔",
+      "3. قرعة اندازی کے نتائج کا انتظار کریں۔"
+    ]
+  },
+  {
+    "id": "bisp-kafaalat-program-2026",
+    "type": "scheme",
+    "category": "Schemes",
+    "department": "Benazir Income Support Programme (BISP)",
+    "title_en": "BISP Kafaalat 10,500 Quarterly Installment 2026",
+    "title_ur": "بینظیر انکم سپورٹ پروگرام کفالت قسط 2026",
+    "vacancies": "Nationwide Beneficiaries",
+    "qualification": "CNIC Holder / PMT Score Verified",
+    "age_limit": "18 - 60 Years",
+    "last_date": "Open Ongoing",
+    "apply_link": "https://8171.bisp.gov.pk",
+    "views": "8,920",
+    "date": "Oct 05, 2026",
+    "description_ur": "بے نظیر انکم سپورٹ پروگرام کے تحت مستحقخاندانوں کے لیے نئی سہ ماہی قسط 10,500 روپے جاری کر دی گئی ہے۔ اہل خواتین اپنے قریبی بی آئی ایس پی کیش سینٹر یا اے ٹی ایم سے رقم وصول کر سکتی ہیں۔",
+    "instructions_ur": [
+      "1. اپنا 13 ہندسوں کا قومی شناختی کارڈ نمبر 8171 پر ایس ایم ایس کریں۔",
+      "2. اہلیت کا پیغام موصول ہونے پر قریبی ریٹیلر پر جائیں۔",
+      "3. بائیو میٹرک تصدیق کے بعد رقم وصول کریں۔"
+    ]
+  },
+  {
+    "id": "pakistan-railways-jobs-2026",
+    "type": "job",
+    "category": "Federal",
+    "department": "Pakistan Railways Headquarters",
+    "title_en": "Pakistan Railways Junior Clerk & Technician Jobs 2026",
+    "title_ur": "پاکستان ریلویز جونیئر کلرک اور ٹیکنیشین جابز 2026",
+    "vacancies": "280 Seats",
+    "qualification": "Matric / Intermediate / DAE",
+    "age_limit": "18 - 28 Years",
+    "last_date": "November 18, 2026",
+    "apply_link": "https://pakrail.gov.pk",
+    "views": "1,940",
+    "date": "Oct 09, 2026",
+    "description_ur": "پاکستان ریلویز نے ملک بھر کے تمام ڈویژنز کے لیے جونیئر کلرکس، اسسٹنٹس اور فنی عملے کی خالی اسامیوں پر بھرتی کے لیے امیدواروں سے درخواستیں طلب کی ہیں۔",
+    "instructions_ur": [
+      "1. ریلویز کی ویب سائٹ سے درخواست فارم ڈاؤن لوڈ کریں۔",
+      "2. بینک ڈرافٹ یا پوستال آرڈر کے ساتھ تمام دستاویزات ہیڈ کوارٹر ارسال کریں۔",
+      "3. ٹیسٹ اور انٹرویو کی تاریخ کا نوٹس ویب سائٹ پر چیک کریں۔"
+    ]
+  },
+  {
+    "id": "pak-army-soldier-2026",
+    "type": "job",
+    "category": "Federal",
+    "department": "Pakistan Army",
+    "title_en": "Join Pakistan Army as Soldier (Sipahi) 2026",
+    "title_ur": "پاک فوج بطور سپاہی شمولیت 2026",
+    "vacancies": "Multiple Openings",
+    "qualification": "Matric or Above",
+    "age_limit": "17.5 - 23 Years",
+    "last_date": "November 22, 2026",
+    "apply_link": "https://joinpakarmy.gov.pk",
+    "views": "4,830",
+    "date": "Oct 13, 2026",
+    "description_ur": "پاک فوج میں بطور سپاہی، کلرک، اور کک شمولیت کے لیے رجسٹریشن کا آغاز کر دیا گیا ہے۔ تمام امیدوار آن لائن یا قریبی آرمی سلیکشن اینڈ ریکروٹمنٹ سینٹر کے ذریعے رجسٹریشن کر سکتے ہیں۔",
+    "instructions_ur": [
+      "1. آفیشل ویب سائٹ joinpakarmy.gov.pk پر جائیں۔",
+      "2. آن لائن رجسٹریشن فارم پُر کریں اور رول نمبر سلپ حاصل کریں۔",
+      "3. ابتدائی طبی اور تعلیمی ٹیسٹ کے لیے مقررہ مرکز پر حاضر ہوں۔"
+    ]
+  },
+  {
+    "id": "hec-indigenous-scholarship-2026",
+    "type": "scheme",
+    "category": "Schemes",
+    "department": "Higher Education Commission (HEC)",
+    "title_en": "HEC Indigenous MS & PhD Scholarship 2026",
+    "title_ur": "ایچ ای سی انڈیجینس ایم ایس اور پی ایچ ڈی اسکالرشپ 2026",
+    "vacancies": "1,000 Scholarships",
+    "qualification": "BS / Master Degree (16 Years Education)",
+    "age_limit": "Up to 35 Years",
+    "last_date": "December 10, 2026",
+    "apply_link": "https://hec.gov.pk",
+    "views": "3,120",
+    "date": "Oct 07, 2026",
+    "description_ur": "ہائر ایجوکیشن کمیشن (HEC) نے پاکستان کی نامور یونیورسٹیوں میں ایم ایس اور پی ایچ ڈی کی تعلیم جاری رکھنے والے ہونہار طلباء کے لیے مکمل مالی معاونت اور ماہانہ وظیفہ اسکالرشپ کا اعلان کیا ہے۔",
+    "instructions_ur": [
+      "1. HEC ایجوکیشن پورٹل پر اپنا پروفائل بنائیں۔",
+      "2. اسکالرشپ پورٹل پر جا کر آن لائن درخواست جمع کروائیں۔",
+      "3. درکار دستاویزات کی اسکین کاپیاں اپ لوڈ کریں۔"
+    ]
+  }
 ]
