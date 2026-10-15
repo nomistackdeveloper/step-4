@@ -14,14 +14,16 @@ document.addEventListener('DOMContentLoaded', () => {
    ========================================================================== */
 async function initializeApp() {
   try {
-    // Fetch site configuration and master jobs.json containing all listings
-    const [configRes, jobsRes] = await Promise.all([
+    const [configRes, jobsRes, schemesRes] = await Promise.all([
       fetch('config/site-config.json'),
-      fetch('data/jobs.json')
+      fetch('data/jobs.json'),
+      fetch('data/schemes.json')
     ]);
 
     siteConfig = await configRes.json();
-    allPostsData = await jobsRes.json();
+    const jobs = await jobsRes.json();
+    const schemes = await schemesRes.json();
+    allPostsData = [...jobs, ...schemes];
 
     renderHeader();
     renderFooter();
