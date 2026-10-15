@@ -10,7 +10,7 @@ let globalData = [];
 
 async function initPortal() {
   try {
-    // 1. Fetch Configuration & Data Files in Parallel
+    // 1. Fetch Configuration & Data Files
     const [configRes, jobsRes, schemesRes] = await Promise.all([
       fetch('config/site-config.json'),
       fetch('data/jobs.json'),
@@ -21,13 +21,13 @@ async function initPortal() {
     const jobs = await jobsRes.json();
     const schemes = await schemesRes.json();
 
-    // Combine jobs and schemes into one master dataset
     globalData = [...jobs, ...schemes];
 
-    // 2. Initialize UI Components
+    // 2. Initialize UI Components & Listeners
     renderTicker(config.ticker_text);
     renderJobCards(globalData);
     setupEventListeners(globalData);
+    setupMobileSearchToggle();
 
   } catch (error) {
     console.error('Error loading portal data:', error);
@@ -39,6 +39,27 @@ async function initPortal() {
         </div>
       `;
     }
+  }
+}
+
+/* ==========================================================================
+   MOBILE SEARCH TOGGLE HANDLER
+   ========================================================================== */
+function setupMobileSearchToggle() {
+  const toggleBtn = document.getElementById('mobile-search-toggle');
+  const searchContainer = document.getElementById('search-container');
+  const searchInput = document.getElementById('search-input');
+
+  if (toggleBtn && searchContainer) {
+    toggleBtn.addEventListener('click', () => {
+      const isHidden = searchContainer.classList.contains('hidden');
+      if (isHidden) {
+        searchContainer.classList.remove('hidden');
+        if (searchInput) searchInput.focus();
+      } else {
+        searchContainer.classList.add('hidden');
+      }
+    });
   }
 }
 
@@ -135,7 +156,7 @@ function setupEventListeners(dataArray) {
   function applyFilters() {
     let filtered = dataArray;
 
-    // 1. Category Tab Filter (All, Federal, Punjab, Schemes)
+    // 1. Category Tab Filter
     if (currentCategory !== 'All') {
       filtered = filtered.filter(item => item.category.toLowerCase() === currentCategory.toLowerCase());
     }
@@ -147,7 +168,7 @@ function setupEventListeners(dataArray) {
       );
     }
 
-    // 3. Multi-Keyword Tokenized Search (English & Urdu)
+    // 3. Multi-Keyword Tokenized Search
     if (searchQuery.trim() !== '') {
       const tokens = searchQuery.toLowerCase().trim().split(/\s+/);
       
@@ -168,7 +189,7 @@ function setupEventListeners(dataArray) {
     renderJobCards(filtered);
   }
 
-  // Live Search Typing Input Event
+  // Search Input Listener
   if (searchInput) {
     searchInput.addEventListener('input', (e) => {
       searchQuery = e.target.value;
@@ -176,7 +197,7 @@ function setupEventListeners(dataArray) {
     });
   }
 
-  // Qualification Dropdown Select Event
+  // Qualification Select Listener
   if (qualSelect) {
     qualSelect.addEventListener('change', (e) => {
       selectedQual = e.target.value;
@@ -184,7 +205,7 @@ function setupEventListeners(dataArray) {
     });
   }
 
-  // Category Tab Buttons Click Event
+  // Category Buttons Listener
   filterBtns.forEach(btn => {
     btn.addEventListener('click', (e) => {
       filterBtns.forEach(b => b.classList.remove('bg-emerald-900', 'text-white'));
@@ -198,7 +219,7 @@ function setupEventListeners(dataArray) {
     });
   });
 
-  // Global Function for 1-Tap Suggestion Pills
+  // Suggestion Pills Helper
   window.applySuggestion = function(keyword) {
     if (searchInput) {
       searchInput.value = keyword;
