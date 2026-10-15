@@ -1,5 +1,5 @@
 /* ==========================================================================
-   PAKJOBS PORTAL - SEPARATED MAIN APPLICATION SCRIPT
+   PAKJOBS PORTAL - SEPARATED MAIN APPLICATION SCRIPT (WITH JS DATA FILE)
    ========================================================================== */
 
 let siteConfig = null;
@@ -10,20 +10,23 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* ==========================================================================
-   1. DATA FETCHING SYSTEM (JSON Loader)
+   1. DATA INITIALIZATION SYSTEM (Connecting local JS data file & site config)
    ========================================================================== */
 async function initializeApp() {
   try {
-    const [configRes, jobsRes, schemesRes] = await Promise.all([
-      fetch('config/site-config.json'),
-      fetch('data/jobs.json'),
-      fetch('data/schemes.json')
-    ]);
-
+    // 1. Fetch site configuration JSON
+    const configRes = await fetch('config/site-config.json');
     siteConfig = await configRes.json();
-    const jobs = await jobsRes.json();
-    const schemes = await schemesRes.json();
-    allPostsData = [...jobs, ...schemes];
+
+    // 2. Load data from your pak-jobs-schemes.js file
+    // Assumes pak-jobs-schemes.js defines a global array named `pakJobsData` or `allJobsData`
+    if (typeof pakJobsData !== 'undefined') {
+      allPostsData = pakJobsData;
+    } else if (typeof allJobsData !== 'undefined') {
+      allPostsData = allJobsData;
+    } else {
+      throw new Error('pakJobsData array not found. Ensure data/pak-jobs-schemes.js is included before app.js in your HTML.');
+    }
 
     renderHeader();
     renderFooter();
