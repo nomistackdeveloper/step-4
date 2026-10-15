@@ -1,5 +1,5 @@
 /* ==========================================================================
-   PAKJOBS PORTAL - SEPARATED MAIN APPLICATION SCRIPT
+   PAKJOBS PORTAL - CONNECTED WITH pak-jobs-schemes.json
    ========================================================================== */
 
 let siteConfig = null;
@@ -10,22 +10,24 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* ==========================================================================
-   1. DATA FETCHING SYSTEM (Single JSON Loader)
+   1. DATA FETCHING SYSTEM (Loading from data/pak-jobs-schemes.json)
    ========================================================================== */
 async function initializeApp() {
   try {
     const timestamp = new Date().getTime();
+    
+    // Fetching site config and the single unified jobs & schemes JSON file
     const [configRes, dataRes] = await Promise.all([
       fetch(`config/site-config.json?v=${timestamp}`),
       fetch(`data/pak-jobs-schemes.json?v=${timestamp}`)
     ]);
 
     if (!configRes.ok || !dataRes.ok) {
-      throw new Error("Failed to load portal configuration or data file.");
+      throw new Error("Could not load JSON files from data directory.");
     }
 
     siteConfig = await configRes.json();
-    allPostsData = await dataRes.json();
+    allPostsData = await dataRes.json(); // Saari 10 entries yahan JSON file se load hongi!
 
     renderHeader();
     renderFooter();
@@ -40,7 +42,7 @@ async function initializeApp() {
     }
 
   } catch (error) {
-    console.error("Error initializing app, loading fallback:", error);
+    console.error("Error fetching JSON files:", error);
     useFallbackData();
   }
 }
@@ -63,9 +65,10 @@ function useFallbackData() {
     ]
   };
 
+  // Minimal fallback just in case fetch fails entirely
   allPostsData = [
     {
-      id: "ppsc-ad-2026",
+      id: "ppsc-assistant-director-2026",
       type: "job",
       category: "Punjab",
       department: "Punjab Public Service Commission (PPSC)",
@@ -381,7 +384,7 @@ function openSearchModal() {
 }
 
 function closeSearchModal() {
-  const modal = document.getElementById("search-modal");
+  const modal = Document.getElementById("search-modal");
   if (modal) {
     modal.classList.add("hidden");
   }
