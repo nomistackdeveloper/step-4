@@ -198,5 +198,30 @@ const pakJobsData = [
     "date": "Oct 07, 2026",
     "description_ur": "ایچ ای سی نے پاکستان کی یونیورسٹیوں میں ایم ایس اور پی ایچ ڈی کے لیے وظیفہ اسکالرشپ کا اعلان کیا ہے۔",
     "instructions_ur": ["1. HEC پورٹل پر آن لائن درخواست جمع کروائیں۔"]
+  },
+  {
+    "id": "ppsc-assistant-director-2026",
+    "type": "job",
+    "category": "Punjab",
+    "department": "Punjab Public Service Commission (PPSC)",
+    "title_en": "PPSC Assistant Director & Administrative Posts Recruitment 2026",
+    "title_ur": "پنجاب پبلک سروس کمیشن اسسٹنٹ ڈائریکٹر اور انتظامی اسامیوں کی بھرتی 2026",
+    "vacancies": "Multiple Seats (BS-16 & BS-17)",
+    "qualification": "Graduation / Master Degree (2nd Division)",
+    "age_limit": "21 - 30 Years (+5 Years General Age Relaxation)",
+    "last_date": "October 26, 2026",
+    "apply_link": "https://www.ppsc.gop.pk",
+    "official_site_link": "https://www.ppsc.gop.pk",
+    "application_form_link": "https://www.ppsc.gop.pk/Advertisements.aspx",
+    "youtube_video_id": "dQw4w9WgXcQ",
+    "views": "2,450",
+    "date": "October 9, 2026",
+    "description_ur": "پنجاب پبلک سروس کمیشن (PPSC) نے مختلف صوبائی محکموں میں خالی اسامیوں کے لیے آن لائن درخواستیں طلب کر لی ہیں۔ اہل اور خواہشمند امیدوار آفیشل ویب سائٹ کے ذریعے اپلائی کر سکتے ہیں۔",
+    "instructions_ur": [
+      "1. PPSC کی آفیشل ویب سائٹ ppsc.gop.pk پر جائیں۔",
+      "2. متعلقہ اشتہار اور کیس نمبر کا انتخاب کریں۔",
+      "3. آن لائن چالان فارم ڈاؤن لوڈ کریں اور فیس قریبی بینک میں جمع کروائیں۔",
+      "4. آخری تاریخ سے پہلے آن لائن درخواست کامیابی کے ساتھ جمع کروائیں۔"
+    ]
   }
 ];
