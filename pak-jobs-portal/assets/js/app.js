@@ -10,20 +10,22 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* ==========================================================================
-   1. DATA FETCHING SYSTEM (JSON Loader)
+   1. DATA FETCHING SYSTEM (Single JSON Loader)
    ========================================================================== */
 async function initializeApp() {
   try {
-    const [configRes, jobsRes, schemesRes] = await Promise.all([
-      fetch('config/site-config.json'),
-      fetch('data/jobs.json'),
-      fetch('data/schemes.json')
+    const timestamp = new Date().getTime();
+    const [configRes, dataRes] = await Promise.all([
+      fetch(`config/site-config.json?v=${timestamp}`),
+      fetch(`data/pak-jobs-schemes.json?v=${timestamp}`)
     ]);
 
+    if (!configRes.ok || !dataRes.ok) {
+      throw new Error("Failed to load portal configuration or data file.");
+    }
+
     siteConfig = await configRes.json();
-    const jobs = await jobsRes.json();
-    const schemes = await schemesRes.json();
-    allPostsData = [...jobs, ...schemes];
+    allPostsData = await dataRes.json();
 
     renderHeader();
     renderFooter();
@@ -38,7 +40,7 @@ async function initializeApp() {
     }
 
   } catch (error) {
-    console.error("Error initializing app:", error);
+    console.error("Error initializing app, loading fallback:", error);
     useFallbackData();
   }
 }
