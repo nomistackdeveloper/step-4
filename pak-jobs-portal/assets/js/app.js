@@ -21,7 +21,7 @@ async function initPortal() {
     const jobs = await jobsRes.json();
     const schemes = await schemesRes.json();
 
-    // Combine jobs and schemes into one master array
+    // Combine jobs and schemes into one master dataset
     globalData = [...jobs, ...schemes];
 
     // 2. Initialize UI Components
@@ -35,7 +35,7 @@ async function initPortal() {
     if (container) {
       container.innerHTML = `
         <div class="col-span-full bg-red-50 border border-red-200 text-red-700 p-6 rounded-2xl text-center text-xs font-medium">
-          ⚠️ Failed to load portal data. Please ensure JSON files are properly placed in the /data/ folder.
+          ⚠️ Failed to load portal data. Please ensure JSON files are properly placed in their folders.
         </div>
       `;
     }
@@ -70,7 +70,7 @@ function renderJobCards(dataArray) {
       <div class="col-span-full bg-white border border-gray-200 rounded-3xl p-10 text-center space-y-2 shadow-sm">
         <p class="text-2xl">🔍</p>
         <h3 class="font-bold text-gray-800 text-sm">No matching listings found</h3>
-        <p class="text-xs text-gray-500">Try searching with a different keyword or category filter.</p>
+        <p class="text-xs text-gray-500">Try searching with a different keyword, qualification, or category filter.</p>
       </div>
     `;
     return;
@@ -121,38 +121,54 @@ function renderJobCards(dataArray) {
 }
 
 /* ==========================================================================
-   SEARCH & CATEGORY FILTER LISTENERS
+   ADVANCED FILTERING & SEARCH EVENT LISTENERS
    ========================================================================== */
 function setupEventListeners(dataArray) {
   const searchInput = document.getElementById('search-input');
+  const qualSelect = document.getElementById('qualification-filter');
   const filterBtns = document.querySelectorAll('.filter-btn');
 
   let currentCategory = 'All';
   let searchQuery = '';
+  let selectedQual = 'All';
 
   function applyFilters() {
     let filtered = dataArray;
 
-    // Filter by Category
+    // 1. Category Tab Filter (All, Federal, Punjab, Schemes)
     if (currentCategory !== 'All') {
       filtered = filtered.filter(item => item.category.toLowerCase() === currentCategory.toLowerCase());
     }
 
-    // Filter by Search Query
-    if (searchQuery.trim() !== '') {
-      const q = searchQuery.toLowerCase();
+    // 2. Qualification Dropdown Filter
+    if (selectedQual !== 'All') {
       filtered = filtered.filter(item => 
-        item.title_en.toLowerCase().includes(q) ||
-        item.title_ur.toLowerCase().includes(q) ||
-        item.department.toLowerCase().includes(q) ||
-        item.category.toLowerCase().includes(q)
+        (item.qualification || '').toLowerCase().includes(selectedQual.toLowerCase())
       );
+    }
+
+    // 3. Multi-Keyword Tokenized Search (English & Urdu)
+    if (searchQuery.trim() !== '') {
+      const tokens = searchQuery.toLowerCase().trim().split(/\s+/);
+      
+      filtered = filtered.filter(item => {
+        const searchableText = `
+          ${item.title_en || ''} 
+          ${item.title_ur || ''} 
+          ${item.department || ''} 
+          ${item.category || ''} 
+          ${item.qualification || ''} 
+          ${item.description_ur || ''}
+        `.toLowerCase();
+
+        return tokens.every(token => searchableText.includes(token));
+      });
     }
 
     renderJobCards(filtered);
   }
 
-  // Search Input Event
+  // Live Search Typing Input Event
   if (searchInput) {
     searchInput.addEventListener('input', (e) => {
       searchQuery = e.target.value;
@@ -160,7 +176,15 @@ function setupEventListeners(dataArray) {
     });
   }
 
-  // Category Buttons Click Event
+  // Qualification Dropdown Select Event
+  if (qualSelect) {
+    qualSelect.addEventListener('change', (e) => {
+      selectedQual = e.target.value;
+      applyFilters();
+    });
+  }
+
+  // Category Tab Buttons Click Event
   filterBtns.forEach(btn => {
     btn.addEventListener('click', (e) => {
       filterBtns.forEach(b => b.classList.remove('bg-emerald-900', 'text-white'));
@@ -173,6 +197,15 @@ function setupEventListeners(dataArray) {
       applyFilters();
     });
   });
+
+  // Global Function for 1-Tap Suggestion Pills
+  window.applySuggestion = function(keyword) {
+    if (searchInput) {
+      searchInput.value = keyword;
+      searchQuery = keyword;
+      applyFilters();
+    }
+  };
 }
 
 /* ==========================================================================
@@ -182,7 +215,5 @@ function openJobDetail(jobId) {
   const item = globalData.find(d => d.id === jobId);
   if (!item) return;
 
-  // You can route to a detail view or open a dynamic modal.
-  // For static GitHub Pages, we can populate a modal or redirect.
   alert(`Opening details for: ${item.title_en}\nLast Date: ${item.last_date}\nApply Link: ${item.apply_link}`);
 }
