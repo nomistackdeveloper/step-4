@@ -82,5 +82,26 @@
       "2. پورٹل پر اپنا بل ریفرنس نمبر درج کریں۔",
       "3. اہلیت کی تصدیق کے بعد فارم پر کر کے جمع کروائیں۔"
     ]
-  }
+  },
+  {
+  "id": "naya-job-id-2026",
+  "type": "job",
+  "category": "Punjab", 
+  "department": "Punjab Police / PPSC / Education Dept",
+  "title_en": "Your New Job Title in English (e.g., Educator Jobs 2026)",
+  "title_ur": "اردو میں جاب کا نام (مثلاً: ایجوکیٹرز جابز 2026)",
+  "vacancies": "150 Seats",
+  "qualification": "Graduation / Master Degree",
+  "age_limit": "21 - 35 Years",
+  "last_date": "November 30, 2026",
+  "apply_link": "https://official-website-link.com",
+  "views": "150",
+  "date": "Oct 15, 2026",
+  "description_ur": "یہاں تفصیلی معلومات اردو میں لکھیں کہ کون کون اپلائی کر سکتا ہے اور کیا طریقہ کار ہے۔",
+  "instructions_ur": [
+    "1. آفیشل ویب سائٹ پر جائیں۔",
+    "2. آن لائن فارم پُر کریں۔",
+    "3. فیس جمع کروائیں۔"
+  ]
+}
 ]
