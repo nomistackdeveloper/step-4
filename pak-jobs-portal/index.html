@@ -15,19 +15,29 @@
 </head>
 <body class="bg-gray-100 text-gray-800 flex flex-col min-h-screen">
 
-  <!-- Shared Header Placeholder -->
+  <!-- Header Section with Interactive Mobile Search Toggle -->
   <div id="site-header">
     <header class="bg-emerald-900 text-white shadow-md sticky top-0 z-50">
       <div class="max-w-5xl mx-auto px-4 py-3 flex justify-between items-center">
+        
+        <!-- Logo -->
         <a href="index.html" class="text-lg sm:text-xl font-black tracking-tight flex items-center gap-2">
           <span class="bg-emerald-500 text-emerald-950 px-2 py-0.5 rounded text-sm">PK</span>
           <span>PakJobs Portal</span>
         </a>
+
+        <!-- Right Side Nav Actions -->
         <nav class="flex items-center gap-2 sm:gap-3 text-xs font-semibold">
           <a href="pages/about.html" class="hover:text-emerald-300 transition hidden sm:inline">About</a>
           <a href="pages/contact.html" class="hover:text-emerald-300 transition hidden sm:inline">Contact</a>
           <a href="index.html" class="bg-emerald-800 hover:bg-emerald-700 py-1.5 px-3 rounded-xl transition">🏠 Home</a>
+          
+          <!-- Mobile Search Toggle Button (Shows ONLY on Mobile) -->
+          <button id="mobile-search-toggle" class="sm:hidden bg-emerald-800 hover:bg-emerald-700 p-2 rounded-xl text-sm flex items-center gap-1 transition">
+            🔍 <span class="text-[11px]">Search</span>
+          </button>
         </nav>
+
       </div>
     </header>
   </div>
@@ -45,8 +55,8 @@
   <!-- Main Content Container -->
   <main class="flex-grow max-w-5xl w-full mx-auto px-4 py-6 space-y-6">
 
-    <!-- Search & Advanced Filter Section -->
-    <div class="bg-white p-4 sm:p-6 rounded-3xl shadow-sm border border-gray-200 space-y-4">
+    <!-- Search & Advanced Filter Section (Hidden by Default on Mobile, Toggleable) -->
+    <div id="search-container" class="hidden sm:block bg-white p-4 sm:p-6 rounded-3xl shadow-sm border border-gray-200 space-y-4 transition-all duration-300">
       
       <!-- Search Input + Qualification Dropdown -->
       <div class="flex flex-col sm:flex-row gap-3">
