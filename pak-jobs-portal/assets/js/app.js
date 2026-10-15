@@ -15,11 +15,11 @@ document.addEventListener('DOMContentLoaded', () => {
 async function initializeApp() {
   try {
     // 1. Fetch site configuration JSON
-    const configRes = await fetch('config/site-config.json');
+    const timestamp = new Date().getTime();
+    const configRes = await fetch(`config/site-config.json?v=${timestamp}`);
     siteConfig = await configRes.json();
 
-    // 2. Load data from your pak-jobs-schemes.js file
-    // Assumes pak-jobs-schemes.js defines a global array named `pakJobsData` or `allJobsData`
+    // 2. Load data from your pak-jobs-schemes.js file properly
     if (typeof pakJobsData !== 'undefined') {
       allPostsData = pakJobsData;
     } else if (typeof allJobsData !== 'undefined') {
@@ -63,8 +63,6 @@ function useFallbackData() {
       { label: "Disclaimer", page: "disclaimer" }
     ]
   };
-
-
 
   renderHeader();
   renderFooter();
