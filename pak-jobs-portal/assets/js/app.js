@@ -64,25 +64,7 @@ function useFallbackData() {
     ]
   };
 
-  allPostsData = [
-    {
-      id: "ppsc-ad-2026",
-      type: "job",
-      category: "Punjab",
-      department: "Punjab Public Service Commission (PPSC)",
-      title_en: "PPSC Assistant Director Recruitment 2026",
-      title_ur: "پنجاب پبلک سروس کمیشن اسسٹنٹ ڈائریکٹر بھرتی 2026",
-      vacancies: "45 Seats",
-      qualification: "Master Degree / Graduation",
-      age_limit: "21 - 30 Years",
-      last_date: "November 15, 2026",
-      apply_link: "https://ppsc.gop.pk",
-      views: "1,420",
-      date: "Oct 14, 2026",
-      description_ur: "پنجاب پبلک سروس کمیشن نے مختلف محکموں میں خالی اسامیوں کے لیے آن لائن درخواستیں طلب کر لی ہیں۔",
-      instructions_ur: ["1. PPSC کی آفیشل ویب سائٹ سے چالان فارم ڈاؤن لوڈ کریں۔"]
-    }
-  ];
+
 
   renderHeader();
   renderFooter();
