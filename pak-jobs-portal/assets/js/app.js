@@ -22,7 +22,7 @@ async function initPortal() {
     const schemes = await schemesRes.json();
 
     // Combine jobs and schemes into one master array
-    globalData = [...jobs, ...schemes];
+    globalData = [...pak-jobs-schemes.json];
 
     // 2. Initialize UI Components
     renderTicker(config.ticker_text);
