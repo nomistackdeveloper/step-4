@@ -1,457 +1,217 @@
 /* ==========================================================================
-   PAKJOBS PORTAL - SINGLE JSON FILE APPLICATION SCRIPT
+   PAKJOBS PORTAL - MAIN APPLICATION SCRIPT
    ========================================================================== */
-
-let siteConfig = null;
-let allPostsData = [];
 
 document.addEventListener('DOMContentLoaded', () => {
-  initializeApp();
+  initPortal();
 });
 
-/* ==========================================================================
-   1. DATA FETCHING SYSTEM (Single JSON Loader with Cache Buster)
-   ========================================================================== */
-async function initializeApp() {
+let globalData = [];
+
+async function initPortal() {
   try {
-    const timestamp = new Date().getTime();
-    const [configRes, dataRes] = await Promise.all([
-      fetch(`config/site-config.json?v=${timestamp}`),
-      fetch(`data/pak-jobs-schemes.json?v=${timestamp}`)
+    // 1. Fetch Configuration & Data Files in Parallel
+    const [configRes, jobsRes, schemesRes] = await Promise.all([
+      fetch('config/site-config.json'),
+      fetch('data/jobs.json'),
+      fetch('data/schemes.json')
     ]);
 
-    siteConfig = await configRes.json();
-    allPostsData = await dataRes.json();
+    const config = await configRes.json();
+    const jobs = await jobsRes.json();
+    const schemes = await schemesRes.json();
 
-    renderHeader();
-    renderFooter();
+    // Combine jobs and schemes into one master array
+    globalData = [...jobs, ...schemes];
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const jobId = urlParams.get('id');
-
-    if (jobId) {
-      router('detail', jobId);
-    } else {
-      router('home');
-    }
+    // 2. Initialize UI Components
+    renderTicker(config.ticker_text);
+    renderJobCards(globalData);
+    setupEventListeners(globalData);
 
   } catch (error) {
-    console.error("Error initializing app:", error);
-    useFallbackData();
-  }
-}
-
-function useFallbackData() {
-  siteConfig = {
-    site_name: "PakJobs Portal",
-    ticker_text: "Latest: PPSC Assistant Director Jobs 2026 & PM Youth Loan Scheme Open!",
-    nav_links: [
-      { label: "Home", action: "home" },
-      { label: "Federal Jobs", category: "Federal" },
-      { label: "Punjab Jobs", category: "Punjab" },
-      { label: "Govt Schemes", category: "Schemes" }
-    ],
-    footer_links: [
-      { label: "About Us", page: "about" },
-      { label: "Contact Us", page: "contact" },
-      { label: "Privacy Policy", page: "privacy" },
-      { label: "Disclaimer", page: "disclaimer" }
-    ]
-  };
-
-  allPostsData = [
-    {
-      id: "ppsc-ad-2026",
-      type: "job",
-      category: "Punjab",
-      department: "Punjab Public Service Commission (PPSC)",
-      title_en: "PPSC Assistant Director Recruitment 2026",
-      title_ur: "پنجاب پبلک سروس کمیشن اسسٹنٹ ڈائریکٹر بھرتی 2026",
-      vacancies: "45 Seats",
-      qualification: "Master Degree / Graduation",
-      age_limit: "21 - 30 Years",
-      last_date: "November 15, 2026",
-      apply_link: "https://ppsc.gop.pk",
-      views: "1,420",
-      date: "Oct 14, 2026",
-      description_ur: "پنجاب پبلک سروس کمیشن نے مختلف محکموں میں خالی اسامیوں کے لیے آن لائن درخواستیں طلب کر لی ہیں۔",
-      instructions_ur: ["1. PPSC کی آفیشل ویب سائٹ سے چالان فارم ڈاؤن لوڈ کریں۔"]
+    console.error('Error loading portal data:', error);
+    const container = document.getElementById('job-container');
+    if (container) {
+      container.innerHTML = `
+        <div class="col-span-full bg-red-50 border border-red-200 text-red-700 p-6 rounded-2xl text-center text-xs font-medium">
+          ⚠️ Failed to load portal data. Please ensure JSON files are properly placed in the /data/ folder.
+        </div>
+      `;
     }
-  ];
-
-  renderHeader();
-  renderFooter();
-  router('home');
+  }
 }
 
 /* ==========================================================================
-   2. HEADER & FOOTER RENDERERS
+   RENDER TICKER TEXT
    ========================================================================== */
-function renderHeader() {
-  const headerEl = document.getElementById("main-header");
-  if (!headerEl) return;
-
-  headerEl.innerHTML = `
-    <div class="bg-emerald-950 text-emerald-200 text-xs py-1.5 px-4 text-center font-medium truncate border-b border-emerald-800/50">
-      🔔 <span class="tracking-wide">${siteConfig.ticker_text}</span>
-    </div>
-
-    <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
-      <a href="index.html" onclick="event.preventDefault(); router('home')" class="flex items-center gap-2 text-xl font-black tracking-tight text-white">
-        <span class="bg-emerald-500 text-emerald-950 px-2 py-0.5 rounded text-sm font-extrabold">PK</span>
-        <span>${siteConfig.site_name}</span>
-      </a>
-
-      <nav class="hidden md:flex items-center gap-5 text-sm font-semibold">
-        ${siteConfig.nav_links.map(link => `
-          <button onclick="${link.action ? `router('${link.action}')` : `filterCategory('${link.category}')`}" 
-                  class="hover:text-emerald-300 transition-colors py-1">
-            ${link.label}
-          </button>
-        `).join('')}
-      </nav>
-
-      <button onclick="openSearchModal()" class="hidden sm:flex bg-emerald-800 hover:bg-emerald-700 text-emerald-100 text-xs font-semibold py-1.5 px-3 rounded-lg items-center gap-2 border border-emerald-700">
-        🔍 <span>Search Jobs...</span>
-      </button>
-    </div>
-  `;
-}
-
-function renderFooter() {
-  const footerEl = document.getElementById("main-footer");
-  if (!footerEl) return;
-
-  footerEl.innerHTML = `
-    <div class="max-w-6xl mx-auto px-4 py-8 grid grid-cols-1 md:grid-cols-3 gap-8 text-sm">
-      <div>
-        <h3 class="text-white font-bold text-lg mb-3 flex items-center gap-2">
-          <span class="bg-emerald-600 text-white px-2 py-0.5 rounded text-xs">PK</span>
-          ${siteConfig.site_name}
-        </h3>
-        <p class="text-gray-400 text-xs leading-relaxed">
-          Pakistan's centralized job alerts portal for daily government advertisements, official test notifications, youth loan schemes, and scholarships.
-        </p>
-      </div>
-
-      <div>
-        <h4 class="text-white font-bold mb-3">Quick Navigation</h4>
-        <ul class="space-y-2 text-xs text-gray-400">
-          <li><button onclick="filterCategory('Federal')" class="hover:text-emerald-400">Federal Jobs (FPSC, NTS)</button></li>
-          <li><button onclick="filterCategory('Punjab')" class="hover:text-emerald-400">Punjab Jobs (PPSC)</button></li>
-          <li><button onclick="filterCategory('Schemes')" class="hover:text-emerald-400">Government Schemes & Loans</button></li>
-        </ul>
-      </div>
-
-      <div>
-        <h4 class="text-white font-bold mb-3">Legal & Compliance</h4>
-        <ul class="space-y-2 text-xs text-gray-400">
-          ${siteConfig.footer_links.map(link => `
-            <li><button onclick="renderStaticPage('${link.page}')" class="hover:text-emerald-400">${link.label}</button></li>
-          `).join('')}
-        </ul>
-      </div>
-    </div>
-
-    <div class="bg-gray-950 py-4 text-center text-xs text-gray-500 border-t border-gray-800">
-      © 2026 ${siteConfig.site_name}. All rights reserved. Sourced from official government notifications in Pakistan.
-    </div>
-  `;
+function renderTicker(text) {
+  const tickerEl = document.getElementById('ticker-text');
+  if (tickerEl) {
+    tickerEl.textContent = text;
+  }
 }
 
 /* ==========================================================================
-   3. ROUTING & VIEWS
+   RENDER JOB CARDS DYNAMICALLY
    ========================================================================== */
-function router(view, param = null) {
-  window.scrollTo(0, 0);
-
-  if (view === "home") {
-    history.pushState(null, "", "index.html");
-    renderHomePage(allPostsData);
-  } else if (view === "detail") {
-    history.pushState(null, "", `?id=${param}`);
-    renderDetailPage(param);
-  }
-}
-
-function filterCategory(catName) {
-  window.scrollTo(0, 0);
-  const filtered = allPostsData.filter(p => p.category.toLowerCase() === catName.toLowerCase() || (catName === 'jobs' && p.type === 'job'));
-  renderHomePage(filtered.length ? filtered : allPostsData, catName);
-}
-
-function renderHomePage(dataList, activeCategory = "All Recent Listings") {
-  const app = document.getElementById("app-content");
-  if (!app) return;
-
-  app.innerHTML = `
-    <section class="bg-emerald-900 text-white rounded-2xl p-5 sm:p-8 shadow-md relative overflow-hidden">
-      <div class="relative z-10 max-w-2xl">
-        <span class="bg-emerald-800 text-emerald-200 text-xs font-semibold px-3 py-1 rounded-full uppercase">Official Pakistan Notifications</span>
-        <h1 class="text-2xl sm:text-3xl font-extrabold mt-2 leading-tight">
-          Find Your Future in Government Jobs & Youth Schemes
-        </h1>
-        <p class="text-emerald-100 text-xs sm:text-sm mt-2 opacity-90">
-          Complete details of Federal, Provincial, Youth Loans & Scholarships across Pakistan.
-        </p>
-      </div>
-    </section>
-
-    <div class="flex gap-2 overflow-x-auto pb-2 hide-scrollbar">
-      <button onclick="router('home')" class="bg-emerald-700 text-white font-semibold text-xs py-2 px-4 rounded-xl whitespace-nowrap shadow-sm">
-        All Listings
-      </button>
-      <button onclick="filterCategory('Punjab')" class="bg-white hover:bg-emerald-50 text-gray-700 font-semibold text-xs py-2 px-4 rounded-xl border border-gray-200 whitespace-nowrap shadow-sm">
-        Punjab Jobs
-      </button>
-      <button onclick="filterCategory('Federal')" class="bg-white hover:bg-emerald-50 text-gray-700 font-semibold text-xs py-2 px-4 rounded-xl border border-gray-200 whitespace-nowrap shadow-sm">
-        Federal Jobs
-      </button>
-      <button onclick="filterCategory('Schemes')" class="bg-white hover:bg-emerald-50 text-gray-700 font-semibold text-xs py-2 px-4 rounded-xl border border-gray-200 whitespace-nowrap shadow-sm">
-        Govt Schemes
-      </button>
-    </div>
-
-    <section class="space-y-4">
-      <div class="flex justify-between items-center">
-        <h2 class="text-lg font-bold text-gray-900">📌 ${activeCategory}</h2>
-        <span class="text-xs text-gray-500">${dataList.length} posts found</span>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        ${dataList.map(item => `
-          <div onclick="router('detail', '${item.id}')" class="bg-white p-4 rounded-2xl shadow-sm border border-gray-200 hover:border-emerald-500 transition cursor-pointer flex flex-col justify-between">
-            <div>
-              <div class="flex justify-between items-start gap-2 mb-2">
-                <span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider">${item.category}</span>
-                <span class="text-[11px] text-gray-400">📅 ${item.date}</span>
-              </div>
-              <h3 class="font-bold text-gray-900 text-sm sm:text-base line-clamp-2 hover:text-emerald-700">${item.title_en}</h3>
-              <p class="font-urdu text-xs text-emerald-800 mt-1 text-right line-clamp-1">${item.title_ur}</p>
-              
-              <div class="mt-3 bg-gray-50 p-2.5 rounded-xl space-y-1 text-xs">
-                <div class="flex justify-between"><span class="text-gray-500">Dept:</span> <strong class="text-gray-800 truncate">${item.department}</strong></div>
-                <div class="flex justify-between"><span class="text-gray-500">Last Date:</span> <strong class="text-red-600">${item.last_date}</strong></div>
-              </div>
-            </div>
-
-            <div class="mt-4 pt-3 border-t border-gray-100 flex justify-between items-center">
-              <span class="text-[11px] text-gray-400">👁️ ${item.views} views</span>
-              <span class="bg-emerald-700 hover:bg-emerald-800 text-white font-semibold text-xs px-3 py-1.5 rounded-lg transition">
-                View Details →
-              </span>
-            </div>
-          </div>
-        `).join('')}
-      </div>
-    </section>
-  `;
-}
-
-function renderDetailPage(itemId) {
-  const item = allPostsData.find(p => p.id === itemId) || allPostsData[0];
-  const app = document.getElementById("app-content");
-  if (!app) return;
-
-  app.innerHTML = `
-    <nav class="text-xs text-gray-500 flex items-center gap-2">
-      <button onclick="router('home')" class="hover:text-emerald-700">Home</button>
-      <span>/</span>
-      <button onclick="filterCategory('${item.category}')" class="hover:text-emerald-700">${item.category}</button>
-      <span>/</span>
-      <span class="text-gray-800 truncate font-medium">${item.title_en}</span>
-    </nav>
-
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      <article class="lg:col-span-2 space-y-5">
-        
-        <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-200">
-          <div class="flex flex-wrap gap-2 items-center mb-2">
-            <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-2.5 py-0.5 rounded-full uppercase">${item.category}</span>
-            <span class="text-xs text-gray-400">Posted on: ${item.date}</span>
-          </div>
-          <h1 class="text-xl sm:text-2xl font-black text-gray-900 leading-snug">${item.title_en}</h1>
-          <p class="font-urdu text-sm text-emerald-900 mt-2 text-right">${item.title_ur}</p>
-        </div>
-
-        <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-200 space-y-4">
-          <h2 class="text-sm font-bold text-gray-900 border-b pb-2 flex items-center gap-2">
-            📌 <span>Quick Summary & Eligibility</span>
-          </h2>
-
-          <div class="grid grid-cols-2 gap-3 text-xs">
-            <div class="bg-gray-50 p-3 rounded-xl border border-gray-100">
-              <span class="text-gray-400 block text-[10px] uppercase font-bold">Department</span>
-              <strong class="text-gray-800 text-sm">${item.department}</strong>
-            </div>
-            <div class="bg-gray-50 p-3 rounded-xl border border-gray-100">
-              <span class="text-gray-400 block text-[10px] uppercase font-bold">Vacancies / Posts</span>
-              <strong class="text-gray-800 text-sm">${item.vacancies}</strong>
-            </div>
-            <div class="bg-gray-50 p-3 rounded-xl border border-gray-100">
-              <span class="text-gray-400 block text-[10px] uppercase font-bold">Qualification</span>
-              <strong class="text-gray-800 text-sm">${item.qualification}</strong>
-            </div>
-            <div class="bg-gray-50 p-3 rounded-xl border border-gray-100">
-              <span class="text-gray-400 block text-[10px] uppercase font-bold">Age Limit</span>
-              <strong class="text-gray-800 text-sm">${item.age_limit}</strong>
-            </div>
-          </div>
-
-          <div class="bg-red-50 border border-red-200 p-3 rounded-xl text-center">
-            <span class="text-xs text-red-600 block font-semibold">Application Deadline / آخری تاریخ</span>
-            <strong class="text-red-700 text-base font-bold">${item.last_date}</strong>
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-            <a href="${item.apply_link}" target="_blank" rel="noopener noreferrer" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-center py-3 px-4 rounded-xl text-sm transition shadow-sm flex items-center justify-center gap-2">
-              ✅ <span>Apply Online Now</span>
-            </a>
-            <button onclick="shareWhatsApp('${item.title_en}')" class="bg-green-600 hover:bg-green-700 text-white font-bold text-center py-3 px-4 rounded-xl text-sm transition shadow-sm flex items-center justify-center gap-2">
-              📲 <span>Share on WhatsApp</span>
-            </button>
-          </div>
-        </div>
-
-        <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-200 space-y-3">
-          <h3 class="font-bold text-gray-900 text-sm border-b pb-2">تفصیلات اور اپلائی کرنے کا طریقہ (Urdu Details)</h3>
-          <p class="font-urdu text-sm text-gray-800 leading-loose text-right">${item.description_ur}</p>
-          
-          <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-100 mt-3 space-y-2">
-            <h4 class="font-bold text-emerald-900 text-xs">درخواست جمع کروانے کی ہدایات:</h4>
-            ${item.instructions_ur ? item.instructions_ur.map(inst => `
-              <p class="font-urdu text-xs text-emerald-950 text-right">${inst}</p>
-            `).join('') : ''}
-          </div>
-        </div>
-
-      </article>
-
-      <aside class="space-y-4">
-        <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-200 space-y-3">
-          <h3 class="font-bold text-gray-900 text-sm flex items-center gap-2 border-b pb-2">
-            🔥 <span>Popular Schemes</span>
-          </h3>
-          <ul class="space-y-2.5 text-xs text-gray-700">
-            <li class="hover:text-emerald-700 cursor-pointer" onclick="filterCategory('Schemes')">
-              • <strong>PM Youth Business Loan</strong> <span class="block text-[10px] text-gray-400">Up to 75 Lacs Interest-Free</span>
-            </li>
-            <li class="hover:text-emerald-700 cursor-pointer" onclick="filterCategory('Schemes')">
-              • <strong>CM Punjab Solar Panel Scheme</strong> <span class="block text-[10px] text-gray-400">Free Solar for 500 Unit Users</span>
-            </li>
-          </ul>
-        </div>
-      </aside>
-    </div>
-  `;
-}
-
-function renderStaticPage(pageKey) {
-  window.scrollTo(0, 0);
-  const app = document.getElementById("app-content");
-  if (!app) return;
-
-  app.innerHTML = `
-    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 space-y-4 max-w-3xl mx-auto">
-      <h1 class="text-2xl font-bold text-gray-900 border-b pb-2 capitalize">${pageKey.replace('-', ' ')}</h1>
-      <p class="text-xs text-gray-600 leading-relaxed">
-        Welcome to ${siteConfig.site_name}. All job notices published on this portal are collected directly from verified official government notifications in Pakistan.
-      </p>
-      <button onclick="router('home')" class="bg-emerald-700 text-white font-semibold text-xs py-2 px-4 rounded-xl">
-        ← Back to Home
-      </button>
-    </div>
-  `;
-}
-
-/* ==========================================================================
-   4. ADVANCED SEARCH & FILTER MODAL SYSTEM (Education + Field)
-   ========================================================================== */
-function openSearchModal() {
-  const modal = document.getElementById("search-modal");
-  if (modal) {
-    modal.classList.remove("hidden");
-    document.getElementById("modal-search-input")?.focus();
-    triggerModalSearch();
-  }
-}
-
-function closeSearchModal() {
-  const modal = document.getElementById("search-modal");
-  if (modal) {
-    modal.classList.add("hidden");
-  }
-}
-
-function applyModalSuggestion(keyword) {
-  const input = document.getElementById("modal-search-input");
-  if (input) {
-    input.value = keyword;
-    triggerModalSearch();
-  }
-}
-
-function triggerModalSearch() {
-  const query = document.getElementById("modal-search-input")?.value || "";
-  const selectedQual = document.getElementById("modal-qual-filter")?.value || "All";
-  const selectedField = document.getElementById("modal-field-filter")?.value || "All";
-  const resultsContainer = document.getElementById("modal-search-results");
+function renderJobCards(dataArray) {
+  const container = document.getElementById('job-container');
+  const countEl = document.getElementById('result-count');
   
-  if (!resultsContainer) return;
+  if (!container) return;
 
-  let filtered = allPostsData;
-
-  // 1. Filter by Qualification Dropdown
-  if (selectedQual !== "All") {
-    filtered = filtered.filter(item => 
-      (item.qualification || "").toLowerCase().includes(selectedQual.toLowerCase())
-    );
+  if (countEl) {
+    countEl.textContent = `Showing ${dataArray.length} available opportunities`;
   }
 
-  // 2. Filter by Field / Sector Dropdown
-  if (selectedField !== "All") {
-    filtered = filtered.filter(item => 
-      (item.title_en || "").toLowerCase().includes(selectedField.toLowerCase()) ||
-      (item.department || "").toLowerCase().includes(selectedField.toLowerCase()) ||
-      (item.category || "").toLowerCase().includes(selectedField.toLowerCase())
-    );
-  }
-
-  // 3. Filter by Search Query
-  if (query.trim() !== "") {
-    const q = query.toLowerCase();
-    filtered = filtered.filter(item => 
-      (item.title_en || "").toLowerCase().includes(q) ||
-      (item.title_ur || "").toLowerCase().includes(q) ||
-      (item.department || "").toLowerCase().includes(q) ||
-      (item.category || "").toLowerCase().includes(q)
-    );
-  }
-
-  if (filtered.length === 0) {
-    resultsContainer.innerHTML = `<p class="text-xs text-gray-500 text-center py-4">No matching listings found for your selected filters.</p>`;
+  if (dataArray.length === 0) {
+    container.innerHTML = `
+      <div class="col-span-full bg-white border border-gray-200 rounded-3xl p-10 text-center space-y-2 shadow-sm">
+        <p class="text-2xl">🔍</p>
+        <h3 class="font-bold text-gray-800 text-sm">No matching listings found</h3>
+        <p class="text-xs text-gray-500">Try searching with a different keyword or category filter.</p>
+      </div>
+    `;
     return;
   }
 
-  resultsContainer.innerHTML = filtered.map(item => `
-    <div onclick="closeSearchModal(); router('detail', '${item.id}')" class="p-3 hover:bg-emerald-50 rounded-xl cursor-pointer transition flex justify-between items-center">
+  container.innerHTML = dataArray.map(item => `
+    <div class="job-card bg-white border border-gray-200 rounded-3xl p-5 sm:p-6 flex flex-col justify-between shadow-sm relative overflow-hidden group">
+      
+      <!-- Top Badge & Date -->
       <div>
-        <div class="flex items-center gap-2">
-          <span class="bg-emerald-100 text-emerald-800 text-[9px] font-bold px-2 py-0.5 rounded uppercase">${item.category}</span>
-          <span class="text-[10px] text-gray-400">🎓 ${item.qualification || 'Any'}</span>
+        <div class="flex justify-between items-center mb-3">
+          <span class="bg-emerald-50 text-emerald-800 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider border border-emerald-100">
+            ${item.category}
+          </span>
+          <span class="text-[11px] text-gray-400 font-medium">📅 Last Date: <strong class="text-gray-700">${item.last_date}</strong></span>
         </div>
-        <h4 class="font-bold text-xs text-gray-900 mt-1">${item.title_en}</h4>
-        <p class="text-[10px] text-gray-500">${item.department}</p>
+
+        <!-- Department & Titles -->
+        <p class="text-[11px] font-bold text-emerald-900 uppercase tracking-tight">${item.department}</p>
+        <h3 class="font-extrabold text-gray-900 text-sm sm:text-base mt-1 group-hover:text-emerald-700 transition">
+          ${item.title_en}
+        </h3>
+        <p class="font-urdu text-xs text-gray-600 mt-1 line-clamp-1">${item.title_ur || ''}</p>
+
+        <!-- Key Meta Info -->
+        <div class="grid grid-cols-2 gap-2 mt-4 pt-3 border-t border-gray-100 text-xs">
+          <div class="bg-gray-50 p-2 rounded-xl">
+            <span class="text-[10px] text-gray-400 block font-semibold">Vacancies / Slots</span>
+            <strong class="text-gray-800 text-[11px]">${item.vacancies}</strong>
+          </div>
+          <div class="bg-gray-50 p-2 rounded-xl">
+            <span class="text-[10px] text-gray-400 block font-semibold">Qualification</span>
+            <strong class="text-gray-800 text-[11px] truncate block">${item.qualification}</strong>
+          </div>
+        </div>
       </div>
-      <span class="text-xs text-emerald-700 font-bold whitespace-nowrap">View →</span>
+
+      <!-- Action Button & Views -->
+      <div class="mt-5 pt-3 border-t border-gray-100 flex items-center justify-between">
+        <span class="text-[10px] text-gray-400 font-medium">👁️ ${item.views || 0} views</span>
+        <button onclick="openJobDetail('${item.id}')" class="bg-emerald-700 hover:bg-emerald-800 text-white font-semibold text-xs py-2 px-4 rounded-xl transition shadow-sm">
+          View Details & Apply →
+        </button>
+      </div>
+
     </div>
   `).join('');
 }
 
 /* ==========================================================================
-   5. UTILITY FUNCTIONS
+   ADVANCED FILTERING & SEARCH SYSTEM
    ========================================================================== */
-function shareWhatsApp(title) {
-  const text = encodeURIComponent(`Check out this job update: ${title} on ${window.location.href}`);
-  window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
+function setupEventListeners(dataArray) {
+  const searchInput = document.getElementById('search-input');
+  const qualSelect = document.getElementById('qualification-filter');
+  const filterBtns = document.querySelectorAll('.filter-btn');
+
+  let currentCategory = 'All';
+  let searchQuery = '';
+  let selectedQual = 'All';
+
+  function applyFilters() {
+    let filtered = dataArray;
+
+    // 1. Filter by Category Tab (All, Federal, Punjab, Schemes)
+    if (currentCategory !== 'All') {
+      filtered = filtered.filter(item => item.category.toLowerCase() === currentCategory.toLowerCase());
+    }
+
+    // 2. Filter by Qualification Dropdown
+    if (selectedQual !== 'All') {
+      filtered = filtered.filter(item => item.qualification.toLowerCase().includes(selectedQual.toLowerCase()));
+    }
+
+    // 3. Advanced Multi-Keyword Search (Tokenized across English & Urdu)
+    if (searchQuery.trim() !== '') {
+      const tokens = searchQuery.toLowerCase().trim().split(/\s+/);
+      
+      filtered = filtered.filter(item => {
+        const searchableText = `
+          ${item.title_en || ''} 
+          ${item.title_ur || ''} 
+          ${item.department || ''} 
+          ${item.category || ''} 
+          ${item.qualification || ''} 
+          ${item.description_ur || ''}
+        `.toLowerCase();
+
+        return tokens.every(token => searchableText.includes(token));
+      });
+    }
+
+    renderJobCards(filtered);
+  }
+
+  // Search Input Event
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      searchQuery = e.target.value;
+      applyFilters();
+    });
+  }
+
+  // Qualification Dropdown Event
+  if (qualSelect) {
+    qualSelect.addEventListener('change', (e) => {
+      selectedQual = e.target.value;
+      applyFilters();
+    });
+  }
+
+  // Category Tab Buttons Event
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      filterBtns.forEach(b => b.classList.remove('bg-emerald-900', 'text-white'));
+      filterBtns.forEach(b => b.classList.add('bg-white', 'text-gray-700'));
+      
+      e.target.classList.remove('bg-white', 'text-gray-700');
+      e.target.classList.add('bg-emerald-900', 'text-white');
+
+      currentCategory = e.target.getAttribute('data-category');
+      applyFilters();
+    });
+  });
+
+  // Global helper function for 1-Tap Suggestion Pills
+  window.applySuggestion = function(keyword) {
+    if (searchInput) {
+      searchInput.value = keyword;
+      searchQuery = keyword;
+      applyFilters();
+    }
+  };
+}
+
+/* ==========================================================================
+   JOB DETAIL MODAL / VIEW HANDLER
+   ========================================================================== */
+function openJobDetail(jobId) {
+  const item = globalData.find(d => d.id === jobId);
+  if (!item) return;
+
+  alert(`Opening details for: ${item.title_en}\nLast Date: ${item.last_date}\nApply Link: ${item.apply_link}`);
 }
