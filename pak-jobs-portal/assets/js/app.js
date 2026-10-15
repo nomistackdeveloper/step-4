@@ -367,13 +367,14 @@ function renderStaticPage(pageKey) {
 }
 
 /* ==========================================================================
-   4. INTERACTIVE SEARCH MODAL SYSTEM
+   4. INTERACTIVE SEARCH MODAL SYSTEM WITH QUALIFICATION FILTER
    ========================================================================== */
 function openSearchModal() {
   const modal = document.getElementById("search-modal");
   if (modal) {
     modal.classList.remove("hidden");
     document.getElementById("modal-search-input")?.focus();
+    triggerModalSearch();
   }
 }
 
@@ -388,40 +389,53 @@ function applyModalSuggestion(keyword) {
   const input = document.getElementById("modal-search-input");
   if (input) {
     input.value = keyword;
-    handleModalSearch(keyword);
+    triggerModalSearch();
   }
 }
 
-function handleModalSearch(query) {
+function triggerModalSearch() {
+  const query = document.getElementById("modal-search-input")?.value || "";
+  const selectedQual = document.getElementById("modal-qual-filter")?.value || "All";
   const resultsContainer = document.getElementById("modal-search-results");
+  
   if (!resultsContainer) return;
 
-  if (!query.trim()) {
-    resultsContainer.innerHTML = `<p class="text-xs text-gray-400 text-center py-4">Start typing above to search instantly...</p>`;
-    return;
+  let filtered = allPostsData;
+
+  // 1. Filter by Qualification Dropdown
+  if (selectedQual !== "All") {
+    filtered = filtered.filter(item => 
+      (item.qualification || "").toLowerCase().includes(selectedQual.toLowerCase())
+    );
   }
 
-  const q = query.toLowerCase();
-  const filtered = allPostsData.filter(item => 
-    (item.title_en || '').toLowerCase().includes(q) ||
-    (item.title_ur || '').toLowerCase().includes(q) ||
-    (item.department || '').toLowerCase().includes(q) ||
-    (item.category || '').toLowerCase().includes(q)
-  );
+  // 2. Filter by Search Query
+  if (query.trim() !== "") {
+    const q = query.toLowerCase();
+    filtered = filtered.filter(item => 
+      (item.title_en || "").toLowerCase().includes(q) ||
+      (item.title_ur || "").toLowerCase().includes(q) ||
+      (item.department || "").toLowerCase().includes(q) ||
+      (item.category || "").toLowerCase().includes(q)
+    );
+  }
 
   if (filtered.length === 0) {
-    resultsContainer.innerHTML = `<p class="text-xs text-gray-500 text-center py-4">No matching listings found for "${query}".</p>`;
+    resultsContainer.innerHTML = `<p class="text-xs text-gray-500 text-center py-4">No matching listings found for your search/filter.</p>`;
     return;
   }
 
   resultsContainer.innerHTML = filtered.map(item => `
     <div onclick="closeSearchModal(); router('detail', '${item.id}')" class="p-3 hover:bg-emerald-50 rounded-xl cursor-pointer transition flex justify-between items-center">
       <div>
-        <span class="bg-emerald-100 text-emerald-800 text-[9px] font-bold px-2 py-0.5 rounded uppercase">${item.category}</span>
+        <div class="flex items-center gap-2">
+          <span class="bg-emerald-100 text-emerald-800 text-[9px] font-bold px-2 py-0.5 rounded uppercase">${item.category}</span>
+          <span class="text-[10px] text-gray-400">🎓 ${item.qualification || 'Any'}</span>
+        </div>
         <h4 class="font-bold text-xs text-gray-900 mt-1">${item.title_en}</h4>
         <p class="text-[10px] text-gray-500">${item.department}</p>
       </div>
-      <span class="text-xs text-emerald-700 font-bold">View →</span>
+      <span class="text-xs text-emerald-700 font-bold whitespace-nowrap">View →</span>
     </div>
   `).join('');
 }
