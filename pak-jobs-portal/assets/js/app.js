@@ -1,5 +1,5 @@
 /* ==========================================================================
-   PAKJOBS PORTAL - UPDATED APPLICATION SCRIPT (WITH VIDEO & SOCIAL SHARE)
+   PAKJOBS PORTAL - UPDATED APPLICATION SCRIPT (WITH PAGES FOLDER ROUTING)
    ========================================================================== */
 
 let siteConfig = {
@@ -15,7 +15,7 @@ let siteConfig = {
   footer_links: [
     { label: "About Us", page: "about" },
     { label: "Contact Us", page: "contact" },
-    { label: "Privacy Policy", page: "privacy" },
+    { label: "Privacy Policy", page: "privacy-policy" },
     { label: "Disclaimer", page: "disclaimer" },
     { label: "Terms of Service", page: "terms" }
   ]
@@ -120,7 +120,7 @@ function renderFooter() {
         <h4 class="text-white font-bold mb-3">Legal & Compliance</h4>
         <ul class="space-y-2 text-xs text-gray-400">
           ${siteConfig.footer_links.map(link => `
-            <li><button onclick="renderStaticPage('${link.page}')" class="hover:text-emerald-400">${link.label}</button></li>
+            <li><a href="pages/${link.page}.html" class="hover:text-emerald-400">${link.label}</a></li>
           `).join('')}
         </ul>
       </div>
@@ -366,24 +366,6 @@ function renderDetailPage(itemId) {
   `;
 }
 
-function renderStaticPage(pageKey) {
-  window.scrollTo(0, 0);
-  const app = document.getElementById("app-content");
-  if (!app) return;
-
-  app.innerHTML = `
-    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 space-y-4 max-w-3xl mx-auto">
-      <h1 class="text-2xl font-bold text-gray-900 border-b pb-2 capitalize">${pageKey.replace('-', ' ')}</h1>
-      <p class="text-xs text-gray-600 leading-relaxed">
-        Welcome to ${siteConfig.site_name}. All job notices published on this portal are collected directly from verified official government notifications in Pakistan.
-      </p>
-      <button onclick="router('home')" class="bg-emerald-700 text-white font-semibold text-xs py-2 px-4 rounded-xl">
-        ← Back to Home
-      </button>
-    </div>
-  `;
-}
-
 /* ==========================================================================
    4. ADVANCED SEARCH & FILTER MODAL SYSTEM
    ========================================================================== */
@@ -470,7 +452,7 @@ function triggerModalSearch() {
    ========================================================================== */
 function shareWhatsApp(title, url) {
   const text = encodeURIComponent(`🔥 Check out this Govt Job / Scheme:\n*${title}*\n\nGet complete details & apply here: ${url}`);
-  window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
+  window.open(`https://api.vatsapp.com/send?text=${text}`, '_blank');
 }
 
 function shareFacebook(url) {
