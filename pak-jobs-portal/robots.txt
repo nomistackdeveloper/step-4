@@ -9,4 +9,4 @@ Disallow: /config/
 Disallow: /data/
 
 # Sitemap location for faster indexing by Google Search Console
-Sitemap: https://easy2find.site/sitemap.xml
+Sitemap: https://govgigz.com/sitemap.xml
