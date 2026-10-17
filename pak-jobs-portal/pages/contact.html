@@ -3,8 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contact Us | Pakistan Jobs & Schemes Portal</title>
   
+  <!-- SEO Meta Tags -->
+  <title>Contact Us | GovGigz</title>
+  <meta name="description" content="Get in touch with GovGigz. Contact us for questions about government jobs, schemes, or to report an issue.">
+  
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://govgigz.com/pages/contact.html" />
+
   <!-- Tailwind CSS & Custom Fonts -->
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
@@ -18,6 +24,14 @@
       line-height: 2.2;
     }
   </style>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
+
+  <!-- Google AdSense Code -->
+  <!-- IMPORTANT: Replace 'ca-pub-XXXXXXXXXXXXXXXX' with your actual AdSense Publisher ID -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+
 </head>
 <body class="bg-gray-100 text-gray-800 flex flex-col min-h-screen">
 
@@ -25,8 +39,8 @@
   <header class="bg-emerald-900 text-white shadow-md">
     <div class="max-w-4xl mx-auto px-4 py-4 flex justify-between items-center">
       <a href="../index.html" class="text-xl font-black tracking-tight flex items-center gap-2">
-        <span class="bg-emerald-500 text-emerald-950 px-2 py-0.5 rounded text-sm">PK</span>
-        <span>PakJobs Portal</span>
+        <span class="bg-emerald-500 text-emerald-950 px-2 py-0.5 rounded text-sm">GG</span>
+        <span>GovGigz</span>
       </a>
       <a href="../index.html" class="text-xs bg-emerald-800 hover:bg-emerald-700 py-2 px-4 rounded-xl font-semibold transition">
         ← Back to Home
@@ -54,7 +68,8 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100 space-y-1">
           <span class="text-xs text-gray-400 font-bold uppercase">📧 Official Support Email</span>
-          <p class="text-sm font-semibold text-emerald-800">support@easy2find.site</p>
+          <!-- IMPORTANT: Change this email to your own Gmail or official domain email -->
+          <p class="text-sm font-semibold text-emerald-800">support@govgigz.com</p>
         </div>
         <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100 space-y-1">
           <span class="text-xs text-gray-400 font-bold uppercase">📍 Location</span>
@@ -97,7 +112,7 @@
 
   <!-- Footer Section -->
   <footer class="bg-gray-900 text-gray-400 py-6 text-center text-xs border-t border-gray-800">
-    © 2026 PakJobs Portal. All rights reserved.
+    © 2026 GovGigz. All rights reserved.
   </footer>
 
   <!-- JavaScript for Form Submission Simulation -->
@@ -106,6 +121,9 @@
       event.preventDefault();
       document.getElementById('success-box').classList.remove('hidden');
       event.target.reset();
+      
+      // Note: This form is currently just simulating a successful submission. 
+      // To actually receive emails, you need to connect it to a service like Formspree, Google Forms, or a backend.
     }
   </script>
 
