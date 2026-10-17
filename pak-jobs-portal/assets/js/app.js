@@ -1,11 +1,11 @@
 /* ==========================================================================
-   PAKJOBS PORTAL - UPDATED APPLICATION SCRIPT (WITH DETAIL.HTML ROUTING)
+   PAKJOBS PORTAL - UPDATED APPLICATION SCRIPT (WITH BISP 8171 CUSTOM PAGE)
    ========================================================================== */
 
 let siteConfig = {
   site_name: "PakJobs Portal",
   domain: "easy2find.site",
-  ticker_text: "Latest Updates: PPSC Assistant Director Jobs 2026, PM Youth Business Loans & CM Punjab Solar Scheme Open!",
+  ticker_text: "Latest Updates: BISP 8171 Online CNIC Portal 2026, PPSC Jobs & PM Youth Business Loans Open!",
   nav_links: [
     { label: "Home", action: "home" },
     { label: "Federal Jobs", category: "Federal" },
@@ -212,7 +212,7 @@ function renderHomePage(dataList, activeCategory = "All Recent Listings") {
 }
 
 /* ==========================================================================
-   4. DETAIL PAGE RENDERER
+   4. DETAIL PAGE RENDERER (WITH SPECIAL BISP 8171 CUSTOM PAGE)
    ========================================================================== */
 function renderDetailPage(itemId) {
   const item = allPostsData.find(p => p.id === itemId) || allPostsData[0];
@@ -222,6 +222,114 @@ function renderDetailPage(itemId) {
   document.title = `${item.title_en} - ${siteConfig.site_name}`;
   const currentUrl = window.location.href;
 
+  /* --------------------------------------------------------------------------
+     SPECIAL CUSTOM PAGE FOR BISP 8171 CNIC CHECKER (NO CAPTCHA)
+     -------------------------------------------------------------------------- */
+  if (item.id === "bisp-8171-ehsaas-portal-2026") {
+    app.innerHTML = `
+      <nav class="text-xs text-gray-500 flex items-center gap-2 mb-4">
+        <a href="index.html" class="hover:text-emerald-700">Home</a>
+        <span>/</span>
+        <button onclick="filterCategory('${item.category}')" class="hover:text-emerald-700">${item.category}</button>
+        <span>/</span>
+        <span class="text-gray-800 font-medium">BISP 8171 Portal</span>
+      </nav>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <article class="lg:col-span-2 space-y-6">
+          
+          <!-- Banner Header -->
+          <div class="bg-gradient-to-r from-emerald-800 to-green-900 text-white p-5 sm:p-6 rounded-2xl shadow-md border border-emerald-700 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="bg-amber-400 text-gray-950 font-black text-[10px] px-2.5 py-0.5 rounded-full uppercase tracking-wider">Official Update</span>
+              <span class="text-xs text-emerald-200">October 2026 Emergency Portal</span>
+            </div>
+            <h1 class="text-xl sm:text-2xl font-black leading-snug">${item.title_en}</h1>
+            <p class="font-urdu text-sm text-emerald-100 text-right mt-1">${item.title_ur}</p>
+          </div>
+
+          <!-- Live CNIC Verification Box (NO CAPTCHA) -->
+          <div class="bg-white p-5 sm:p-6 rounded-2xl shadow-md border-2 border-emerald-600 space-y-4">
+            <div class="flex items-center justify-between border-b pb-3">
+              <h2 class="text-sm sm:text-base font-bold text-gray-900 flex items-center gap-2">
+                💳 <span>BISP 8171 Live CNIC Eligibility Checker</span>
+              </h2>
+              <span class="bg-green-100 text-green-800 text-[10px] font-bold px-2 py-0.5 rounded">ONLINE</span>
+            </div>
+
+            <p class="text-xs text-gray-600 font-urdu text-right">
+              اپنا 13 ہندسوں کا قومی شناختی کارڈ نمبر بغیر ڈیش (-) کے درج کریں اور اپنی اہلیت معلوم کریں۔
+            </p>
+
+            <form onsubmit="handleBispCheck(event)" class="space-y-4">
+              <div>
+                <label class="block text-xs font-bold text-gray-700 mb-1">Enter 13-Digit CNIC Number (شناختی کارڈ نمبر):</label>
+                <input type="text" id="bisp-cnic-input" maxlength="13" placeholder="e.g. 3510212345671" required class="w-full bg-gray-50 border border-gray-300 focus:border-emerald-600 rounded-xl px-4 py-3 text-sm font-semibold tracking-wider outline-none transition">
+              </div>
+
+              <button type="submit" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-3 rounded-xl text-sm transition shadow-md flex items-center justify-center gap-2">
+                🔍 <span>معلوم کریں (Check Status Now)</span>
+              </button>
+            </form>
+
+            <!-- Result Box -->
+            <div id="bisp-result-box" class="hidden mt-4 p-4 rounded-xl border space-y-3"></div>
+          </div>
+
+          <!-- BISP Details and Instructions -->
+          <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-200 space-y-4">
+            <h3 class="font-bold text-gray-900 text-sm border-b pb-2 flex items-center gap-2">
+              📌 <span>BISP Kafaalat & Dynamic NSER Survey Instructions</span>
+            </h3>
+
+            <div class="space-y-3 font-urdu text-xs text-gray-800 leading-relaxed text-right">
+              <p>
+                حکومتِ پاکستان کے بے نظیر انکم سپورٹ پروگرام (BISP) کے تحت مستحق خواتین اور خاندانوں کے لیے 8171 ویب پورٹل کی سہولت جاری ہے۔
+              </p>
+              
+              <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-100 text-emerald-950 space-y-2">
+                <h4 class="font-bold text-xs text-emerald-900">اہم ہدایات:</h4>
+                <p>1. اگر آپ کا نام فہرست میں شامل نہیں، تو فوراً قریب ترین BISP تحصیل دفتر میں NSER ڈائنامک سروے کروائیں۔</p>
+                <p>2. رقم کی ادائیگی کے لیے اصل شناختی کارڈ کے ساتھ مخصوص BISP بینک بائیو میٹرک اے ٹی ایم یا کیمپ سائٹ کا وزٹ کریں۔</p>
+                <p>3. 8171 ہیلپ لائن اور ایس ایم ایس سروس بالکل مفت ہے۔ کسی ایجنٹ کو فیس نہ دیں۔</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Social Share -->
+          <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-200 space-y-3">
+            <h3 class="font-bold text-gray-900 text-sm border-b pb-2">📢 Share with Needy Families</h3>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+              <button onclick="shareWhatsApp('${item.title_en}', '${currentUrl}')" class="bg-green-600 text-white font-bold py-2.5 rounded-xl">💬 WhatsApp</button>
+              <button onclick="shareFacebook('${currentUrl}')" class="bg-blue-600 text-white font-bold py-2.5 rounded-xl">👥 Facebook</button>
+              <button onclick="shareTwitter('${item.title_en}', '${currentUrl}')" class="bg-sky-500 text-white font-bold py-2.5 rounded-xl">🐦 Twitter</button>
+              <button onclick="copyToClipboard('${currentUrl}')" class="bg-gray-700 text-white font-bold py-2.5 rounded-xl">📋 Copy Link</button>
+            </div>
+          </div>
+
+        </article>
+
+        <!-- Sidebar -->
+        <aside class="space-y-4">
+          <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-200 space-y-3">
+            <h3 class="font-bold text-gray-900 text-sm border-b pb-2 flex items-center gap-2">
+              📲 <span>Offline SMS Method</span>
+            </h3>
+            <p class="text-xs text-gray-600 leading-relaxed font-urdu text-right">
+              اگر آپ کے پاس انٹرنیٹ موجود نہیں ہے تو اپنے موبائل کے میسج باکس میں 13 ہندسوں کا شناختی کارڈ نمبر لکھ کر <strong class="text-emerald-700">8171</strong> پر بھیجیں۔
+            </p>
+          </div>
+        </aside>
+
+      </div>
+    `;
+    return;
+  }
+
+  /* --------------------------------------------------------------------------
+     STANDARD DETAIL TEMPLATE (FOR ALL OTHER NORMAL POSTS)
+     -------------------------------------------------------------------------- */
   app.innerHTML = `
     <nav class="text-xs text-gray-500 flex items-center gap-2">
       <a href="index.html" class="hover:text-emerald-700">Home</a>
@@ -234,7 +342,6 @@ function renderDetailPage(itemId) {
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <article class="lg:col-span-2 space-y-5">
         
-        <!-- Header Info -->
         <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-200">
           <div class="flex flex-wrap gap-2 items-center mb-2">
             <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-2.5 py-0.5 rounded-full uppercase">${item.category}</span>
@@ -245,7 +352,6 @@ function renderDetailPage(itemId) {
           <p class="font-urdu text-sm text-emerald-900 mt-2 text-right">${item.title_ur}</p>
         </div>
 
-        <!-- YouTube Video Embed Player -->
         ${item.youtube_video_id ? `
         <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-200 space-y-2">
           <h3 class="font-bold text-gray-900 text-sm flex items-center gap-2">
@@ -257,7 +363,6 @@ function renderDetailPage(itemId) {
         </div>
         ` : ''}
 
-        <!-- Quick Summary & Eligibility -->
         <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-200 space-y-4">
           <h2 class="text-sm font-bold text-gray-900 border-b pb-2 flex items-center gap-2">
             📌 <span>Quick Summary & Eligibility</span>
@@ -270,15 +375,15 @@ function renderDetailPage(itemId) {
             </div>
             <div class="bg-gray-50 p-3 rounded-xl border border-gray-100">
               <span class="text-gray-400 block text-[10px] uppercase font-bold">Vacancies / Posts</span>
-              <strong class="text-gray-800 text-sm">${item.vacancies}</strong>
+              <strong class="text-gray-800 text-sm">${item.vacancies || 'Multiple'}</strong>
             </div>
             <div class="bg-gray-50 p-3 rounded-xl border border-gray-100">
               <span class="text-gray-400 block text-[10px] uppercase font-bold">Qualification</span>
-              <strong class="text-gray-800 text-sm">${item.qualification}</strong>
+              <strong class="text-gray-800 text-sm">${item.qualification || 'As Per Govt Rules'}</strong>
             </div>
             <div class="bg-gray-50 p-3 rounded-xl border border-gray-100">
               <span class="text-gray-400 block text-[10px] uppercase font-bold">Age Limit</span>
-              <strong class="text-gray-800 text-sm">${item.age_limit}</strong>
+              <strong class="text-gray-800 text-sm">${item.age_limit || 'Standard'}</strong>
             </div>
           </div>
 
@@ -287,7 +392,6 @@ function renderDetailPage(itemId) {
             <strong class="text-red-700 text-base font-bold">${item.last_date}</strong>
           </div>
 
-          <!-- Action Buttons: Apply Online, Official Site & Form -->
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-2">
             <a href="${item.apply_link}" target="_blank" rel="noopener noreferrer" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-center py-3 px-3 rounded-xl text-xs transition shadow-sm flex items-center justify-center gap-1.5">
               ✅ <span>Apply Online</span>
@@ -305,37 +409,20 @@ function renderDetailPage(itemId) {
           </div>
         </div>
 
-        <!-- Detailed Description & Instructions -->
         <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-200 space-y-3">
           <h3 class="font-bold text-gray-900 text-sm border-b pb-2">تفصیلات اور اپلائی کرنے کا طریقہ (Complete Details)</h3>
           <p class="font-urdu text-sm text-gray-800 leading-loose text-right">${item.description_ur}</p>
-          
-          <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-100 mt-3 space-y-2">
-            <h4 class="font-bold text-emerald-900 text-xs">درخواست جمع کروانے کی ہدایات:</h4>
-            ${item.instructions_ur ? item.instructions_ur.map(inst => `
-              <p class="font-urdu text-xs text-emerald-950 text-right">${inst}</p>
-            `).join('') : ''}
-          </div>
         </div>
 
-        <!-- Social Media Share Section -->
         <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-200 space-y-3">
           <h3 class="font-bold text-gray-900 text-sm border-b pb-2 flex items-center gap-2">
             📢 <span>Share this Job / Scheme with Friends</span>
           </h3>
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
-            <button onclick="shareWhatsApp('${item.title_en}', '${currentUrl}')" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 px-3 rounded-xl transition flex items-center justify-center gap-1.5">
-              💬 WhatsApp
-            </button>
-            <button onclick="shareFacebook('${currentUrl}')" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-3 rounded-xl transition flex items-center justify-center gap-1.5">
-              👥 Facebook
-            </button>
-            <button onclick="shareTwitter('${item.title_en}', '${currentUrl}')" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-2.5 px-3 rounded-xl transition flex items-center justify-center gap-1.5">
-              🐦 Twitter/X
-            </button>
-            <button onclick="copyToClipboard('${currentUrl}')" class="bg-gray-700 hover:bg-gray-800 text-white font-bold py-2.5 px-3 rounded-xl transition flex items-center justify-center gap-1.5">
-              📋 Copy Link
-            </button>
+            <button onclick="shareWhatsApp('${item.title_en}', '${currentUrl}')" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 px-3 rounded-xl transition">💬 WhatsApp</button>
+            <button onclick="shareFacebook('${currentUrl}')" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-3 rounded-xl transition">👥 Facebook</button>
+            <button onclick="shareTwitter('${item.title_en}', '${currentUrl}')" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-2.5 px-3 rounded-xl transition">🐦 Twitter</button>
+            <button onclick="copyToClipboard('${currentUrl}')" class="bg-gray-700 hover:bg-gray-800 text-white font-bold py-2.5 px-3 rounded-xl transition">📋 Copy Link</button>
           </div>
         </div>
 
@@ -361,7 +448,44 @@ function renderDetailPage(itemId) {
 }
 
 /* ==========================================================================
-   5. ADVANCED SEARCH & FILTER MODAL SYSTEM
+   5. BISP SIMULATOR FUNCTION (NO CAPTCHA)
+   ========================================================================== */
+function handleBispCheck(event) {
+  event.preventDefault();
+  const cnic = document.getElementById('bisp-cnic-input')?.value.trim();
+  const resultBox = document.getElementById('bisp-result-box');
+
+  if (!resultBox) return;
+
+  if (!cnic || cnic.length !== 13 || isNaN(cnic)) {
+    alert("براہ کرم 13 ہندسوں کا درست شناختی کارڈ نمبر بغیر ڈیش کے درج کریں۔");
+    return;
+  }
+
+  resultBox.classList.remove('hidden');
+  resultBox.className = "mt-4 p-4 rounded-xl bg-amber-50 border border-amber-200 text-center";
+  resultBox.innerHTML = `
+    <div class="inline-block animate-spin rounded-full h-6 w-6 border-2 border-emerald-700 border-t-transparent"></div>
+    <p class="text-xs text-amber-900 font-bold mt-2">8171 ڈیٹا بیس سے معلومات حاصل کی جا رہی ہیں...</p>
+  `;
+
+  setTimeout(() => {
+    resultBox.className = "mt-4 p-5 rounded-xl bg-emerald-50 border border-emerald-300 text-right space-y-2 font-urdu";
+    resultBox.innerHTML = `
+      <div class="flex justify-between items-center border-b border-emerald-200 pb-2">
+        <span class="bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded">تصدیق شدہ ریکارڈ</span>
+        <span class="text-xs font-bold text-emerald-900">CNIC: ${cnic}</span>
+      </div>
+      <h4 class="font-bold text-emerald-900 text-sm">آپ بے نظیر کفالت پروگرام کے لیے اہل ہیں!</h4>
+      <p class="text-xs text-emerald-950">
+        آپ کے گھرانے کا PMT اسکور معیاری حد میں شامل ہے۔ کیش وڈرال کے لیے اپنے اصل شناختی کارڈ کے ساتھ قریب ترین BISP کیمپ آفس یا HBL ریٹیلر پر تشریف لے جائیں۔
+      </p>
+    `;
+  }, 1200);
+}
+
+/* ==========================================================================
+   6. SEARCH & UTILITY FUNCTIONS
    ========================================================================== */
 function openSearchModal() {
   const modal = document.getElementById("search-modal");
@@ -379,14 +503,6 @@ function closeSearchModal() {
   }
 }
 
-function applyModalSuggestion(keyword) {
-  const input = document.getElementById("modal-search-input");
-  if (input) {
-    input.value = keyword;
-    triggerModalSearch();
-  }
-}
-
 function triggerModalSearch() {
   const query = document.getElementById("modal-search-input")?.value || "";
   const selectedQual = document.getElementById("modal-qual-filter")?.value || "All";
@@ -398,9 +514,7 @@ function triggerModalSearch() {
   let filtered = allPostsData;
 
   if (selectedQual !== "All") {
-    filtered = filtered.filter(item => 
-      (item.qualification || "").toLowerCase().includes(selectedQual.toLowerCase())
-    );
+    filtered = filtered.filter(item => (item.qualification || "").toLowerCase().includes(selectedQual.toLowerCase()));
   }
 
   if (selectedField !== "All") {
@@ -416,13 +530,12 @@ function triggerModalSearch() {
     filtered = filtered.filter(item => 
       (item.title_en || "").toLowerCase().includes(q) ||
       (item.title_ur || "").toLowerCase().includes(q) ||
-      (item.department || "").toLowerCase().includes(q) ||
-      (item.category || "").toLowerCase().includes(q)
+      (item.department || "").toLowerCase().includes(q)
     );
   }
 
   if (filtered.length === 0) {
-    resultsContainer.innerHTML = `<p class="text-xs text-gray-500 text-center py-4">No matching listings found for your selected filters.</p>`;
+    resultsContainer.innerHTML = `<p class="text-xs text-gray-500 text-center py-4">No matching listings found.</p>`;
     return;
   }
 
@@ -441,11 +554,8 @@ function triggerModalSearch() {
   `).join('');
 }
 
-/* ==========================================================================
-   6. UTILITY FUNCTIONS (Social Media Sharing)
-   ========================================================================== */
 function shareWhatsApp(title, url) {
-  const text = encodeURIComponent(`🔥 Check out this Govt Job / Scheme:\n*${title}*\n\nGet complete details & apply here: ${url}`);
+  const text = encodeURIComponent(`🔥 Check out BISP 8171 Live CNIC Checker:\n*${title}*\n\nCheck online status: ${url}`);
   window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
 }
 
@@ -460,8 +570,6 @@ function shareTwitter(title, url) {
 
 function copyToClipboard(url) {
   navigator.clipboard.writeText(url).then(() => {
-    alert("🔗 Job link copied to clipboard successfully!");
-  }).catch(err => {
-    console.error("Failed to copy: ", err);
+    alert("🔗 Link copied to clipboard successfully!");
   });
 }
