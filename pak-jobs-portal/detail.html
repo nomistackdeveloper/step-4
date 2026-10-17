@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Job Details - PakJobs Portal</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Custom Fonts & Styles -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .font-urdu { font-family: 'Noto Nastaliq Urdu', serif; line-height: 2.2; }
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    /* Hide scrollbar for IE, Edge and Firefox */
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col justify-between text-gray-800">
+
+  <!-- Main Header Container -->
+  <header id="main-header" class="bg-emerald-900 text-white shadow-md sticky top-0 z-50"></header>
+
+  <!-- Main Dynamic Content Area -->
+  <main id="app-content" class="max-w-6xl mx-auto px-4 py-6 w-full flex-grow space-y-6">
+    <div class="text-center py-16">
+      <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-emerald-600 border-t-transparent"></div>
+      <p class="text-gray-500 text-xs mt-2">Loading job details...</p>
+    </div>
+  </main>
+
+  <!-- Main Footer Container -->
+  <footer id="main-footer" class="bg-gray-900 text-gray-300 border-t border-gray-800 mt-12"></footer>
+
+  <!-- Advanced Search Modal -->
+  <div id="search-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-xl rounded-2xl p-5 shadow-2xl border border-gray-100 space-y-4">
+      <div class="flex justify-between items-center border-b pb-3">
+        <h3 class="font-bold text-gray-900 text-base">🔍 Search Government Jobs & Schemes</h3>
+        <button onclick="closeSearchModal()" class="text-gray-400 hover:text-red-500 font-bold text-lg">✕</button>
+      </div>
+      
+      <input type="text" id="modal-search-input" oninput="triggerModalSearch()" placeholder="Type job title, department, or keyword..." class="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-2.5 text-xs sm:text-sm focus:outline-none focus:border-emerald-600">
+
+      <div class="grid grid-cols-2 gap-2 text-xs">
+        <select id="modal-qual-filter" onchange="triggerModalSearch()" class="bg-gray-50 border border-gray-300 rounded-xl px-2.5 py-2 text-gray-700">
+          <option value="All">All Qualifications</option>
+          <option value="Matric">Matric</option>
+          <option value="Intermediate">Intermediate</option>
+          <option value="Graduation">Graduation</option>
+          <option value="Master">Master</option>
+        </select>
+
+        <select id="modal-field-filter" onchange="triggerModalSearch()" class="bg-gray-50 border border-gray-300 rounded-xl px-2.5 py-2 text-gray-700">
+          <option value="All">All Categories</option>
+          <option value="Punjab">Punjab</option>
+          <option value="Federal">Federal</option>
+          <option value="Schemes">Schemes</option>
+        </select>
+      </div>
+
+      <div id="modal-search-results" class="max-h-60 overflow-y-auto space-y-2 divide-y divide-gray-100 pt-2">
+        <!-- Search results will inject dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Required Data & Core JS Files -->
+  <script src="data/pak-jobs-schemes.js"></script>
+  <script src="assets/js/app.js"></script>
+
+</body>
+</html>
