@@ -1,5 +1,5 @@
 /* ==========================================================================
-   PAKJOBS PORTAL - UPDATED APPLICATION SCRIPT (WITH PAGES FOLDER ROUTING)
+   PAKJOBS PORTAL - UPDATED APPLICATION SCRIPT (WITH DETAIL.HTML ROUTING)
    ========================================================================== */
 
 let siteConfig = {
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* ==========================================================================
-   1. DATA INITIALIZATION SYSTEM (Instant Load without Fetch)
+   1. DATA INITIALIZATION & SMART ROUTING
    ========================================================================== */
 function initializeApp() {
   try {
@@ -43,13 +43,14 @@ function initializeApp() {
     renderHeader();
     renderFooter();
 
+    const currentPage = window.location.pathname.split("/").pop();
     const urlParams = new URLSearchParams(window.location.search);
     const jobId = urlParams.get('id');
 
-    if (jobId) {
-      router('detail', jobId);
+    if (currentPage === "detail.html" || jobId) {
+      renderDetailPage(jobId);
     } else {
-      router('home');
+      renderHomePage(allPostsData);
     }
 
   } catch (error) {
@@ -70,18 +71,16 @@ function renderHeader() {
     </div>
 
     <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
-      <a href="index.html" onclick="event.preventDefault(); router('home')" class="flex items-center gap-2 text-xl font-black tracking-tight text-white">
+      <a href="index.html" class="flex items-center gap-2 text-xl font-black tracking-tight text-white">
         <span class="bg-emerald-500 text-emerald-950 px-2 py-0.5 rounded text-sm font-extrabold">PK</span>
         <span>${siteConfig.site_name}</span>
       </a>
 
       <nav class="hidden md:flex items-center gap-5 text-sm font-semibold">
-        ${siteConfig.nav_links.map(link => `
-          <button onclick="${link.action ? `router('${link.action}')` : `filterCategory('${link.category}')`}" 
-                  class="hover:text-emerald-300 transition-colors py-1">
-            ${link.label}
-          </button>
-        `).join('')}
+        <a href="index.html" class="hover:text-emerald-300 transition-colors py-1">Home</a>
+        <button onclick="filterCategory('Federal')" class="hover:text-emerald-300 transition-colors py-1">Federal Jobs</button>
+        <button onclick="filterCategory('Punjab')" class="hover:text-emerald-300 transition-colors py-1">Punjab Jobs</button>
+        <button onclick="filterCategory('Schemes')" class="hover:text-emerald-300 transition-colors py-1">Govt Schemes</button>
       </nav>
 
       <button onclick="openSearchModal()" class="hidden sm:flex bg-emerald-800 hover:bg-emerald-700 text-emerald-100 text-xs font-semibold py-1.5 px-3 rounded-lg items-center gap-2 border border-emerald-700">
@@ -133,22 +132,13 @@ function renderFooter() {
 }
 
 /* ==========================================================================
-   3. ROUTING & VIEWS
+   3. CATEGORY FILTERING & HOME RENDERER
    ========================================================================== */
-function router(view, param = null) {
-  window.scrollTo(0, 0);
-
-  if (view === "home") {
-    history.pushState(null, "", "index.html");
-    renderHomePage(allPostsData);
-  } else if (view === "detail") {
-    history.pushState(null, "", `?id=${param}`);
-    renderDetailPage(param);
-  }
-}
-
 function filterCategory(catName) {
-  window.scrollTo(0, 0);
+  if (window.location.pathname.includes("detail.html")) {
+    window.location.href = `index.html?cat=${catName}`;
+    return;
+  }
   const filtered = allPostsData.filter(p => p.category.toLowerCase() === catName.toLowerCase() || (catName === 'jobs' && p.type === 'job'));
   renderHomePage(filtered.length ? filtered : allPostsData, catName);
 }
@@ -171,9 +161,9 @@ function renderHomePage(dataList, activeCategory = "All Recent Listings") {
     </section>
 
     <div class="flex gap-2 overflow-x-auto pb-2 hide-scrollbar">
-      <button onclick="router('home')" class="bg-emerald-700 text-white font-semibold text-xs py-2 px-4 rounded-xl whitespace-nowrap shadow-sm">
+      <a href="index.html" class="bg-emerald-700 text-white font-semibold text-xs py-2 px-4 rounded-xl whitespace-nowrap shadow-sm">
         All Listings
-      </button>
+      </a>
       <button onclick="filterCategory('Punjab')" class="bg-white hover:bg-emerald-50 text-gray-700 font-semibold text-xs py-2 px-4 rounded-xl border border-gray-200 whitespace-nowrap shadow-sm">
         Punjab Jobs
       </button>
@@ -193,7 +183,7 @@ function renderHomePage(dataList, activeCategory = "All Recent Listings") {
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         ${dataList.map(item => `
-          <div onclick="router('detail', '${item.id}')" class="bg-white p-4 rounded-2xl shadow-sm border border-gray-200 hover:border-emerald-500 transition cursor-pointer flex flex-col justify-between">
+          <a href="detail.html?id=${item.id}" class="bg-white p-4 rounded-2xl shadow-sm border border-gray-200 hover:border-emerald-500 transition cursor-pointer flex flex-col justify-between block">
             <div>
               <div class="flex justify-between items-start gap-2 mb-2">
                 <span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider">${item.category}</span>
@@ -214,23 +204,27 @@ function renderHomePage(dataList, activeCategory = "All Recent Listings") {
                 View Details →
               </span>
             </div>
-          </div>
+          </a>
         `).join('')}
       </div>
     </section>
   `;
 }
 
+/* ==========================================================================
+   4. DETAIL PAGE RENDERER
+   ========================================================================== */
 function renderDetailPage(itemId) {
   const item = allPostsData.find(p => p.id === itemId) || allPostsData[0];
   const app = document.getElementById("app-content");
   if (!app) return;
 
+  document.title = `${item.title_en} - ${siteConfig.site_name}`;
   const currentUrl = window.location.href;
 
   app.innerHTML = `
     <nav class="text-xs text-gray-500 flex items-center gap-2">
-      <button onclick="router('home')" class="hover:text-emerald-700">Home</button>
+      <a href="index.html" class="hover:text-emerald-700">Home</a>
       <span>/</span>
       <button onclick="filterCategory('${item.category}')" class="hover:text-emerald-700">${item.category}</button>
       <span>/</span>
@@ -367,7 +361,7 @@ function renderDetailPage(itemId) {
 }
 
 /* ==========================================================================
-   4. ADVANCED SEARCH & FILTER MODAL SYSTEM
+   5. ADVANCED SEARCH & FILTER MODAL SYSTEM
    ========================================================================== */
 function openSearchModal() {
   const modal = document.getElementById("search-modal");
@@ -433,7 +427,7 @@ function triggerModalSearch() {
   }
 
   resultsContainer.innerHTML = filtered.map(item => `
-    <div onclick="closeSearchModal(); router('detail', '${item.id}')" class="p-3 hover:bg-emerald-50 rounded-xl cursor-pointer transition flex justify-between items-center">
+    <a href="detail.html?id=${item.id}" class="p-3 hover:bg-emerald-50 rounded-xl cursor-pointer transition flex justify-between items-center block">
       <div>
         <div class="flex items-center gap-2">
           <span class="bg-emerald-100 text-emerald-800 text-[9px] font-bold px-2 py-0.5 rounded uppercase">${item.category}</span>
@@ -443,16 +437,16 @@ function triggerModalSearch() {
         <p class="text-[10px] text-gray-500">${item.department}</p>
       </div>
       <span class="text-xs text-emerald-700 font-bold whitespace-nowrap">View →</span>
-    </div>
+    </a>
   `).join('');
 }
 
 /* ==========================================================================
-   5. UTILITY FUNCTIONS (Social Media Sharing)
+   6. UTILITY FUNCTIONS (Social Media Sharing)
    ========================================================================== */
 function shareWhatsApp(title, url) {
   const text = encodeURIComponent(`🔥 Check out this Govt Job / Scheme:\n*${title}*\n\nGet complete details & apply here: ${url}`);
-  window.open(`https://api.vatsapp.com/send?text=${text}`, '_blank');
+  window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
 }
 
 function shareFacebook(url) {
